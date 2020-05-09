@@ -26,13 +26,73 @@
             </div>
             <form class="toolbar__search search">
                 <input class="search__input browser-default" type="text" placeholder="Search city or ZIP" autofocus="">
-                <button class="search__speech-button" data-info="Speak!">               
-                </button>
+                <button class="search__speech-button"></button>                
                 <button class="search__general-button" type="submit">Search</button>                
             </form>
         </div>
-
         <main>
+            <div class="weather">
+                <div class="weather__header header">
+                    <div class="header__location">
+                        <i class="material-icons">location_on</i>
+                        <span>Some text</span>
+                    </div>
+                    <div class="header__date">
+                        <i class="material-icons">date_range</i>
+                        <span>Some text</span>
+                    </div>
+                </div>
+                <div class="current-weather">
+                    <div class="current-weather__temperature">10°</div>
+                    <div class="current-weather__details details">
+                        <div class="details__icon">
+                            <i class="owf owf-200 owf-5x"></i>
+                        </div>
+                        <div class="details__description"> cloudy</div>
+                        <div class="details__feelings"> feels like 8deg</div>
+                        <div class="details__wind">wind: 15 m/s</div>
+                        <div class="details__humidity">humidity: 3%</div>
+                    </div>
+                </div>
+                <div class="forecast-container">
+                    <div class="forecast-container__first ">
+                        <div class="forecast-header">some</div>
+                        <div class="forecast-body">
+                            <div class="forecast-temperature">10°</div>
+                            <div class="forecast-icon">
+                                <i class="owf owf-200 owf-4x"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="forecast-container__second">
+                        <div class="forecast-header">some</div>
+                        <div class="forecast-body">
+                            <div class="forecast-temperature">10°</div>
+                            <div class="forecast-icon">
+                                <i class="owf owf-200 owf-4x"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="forecast-container__third">
+                        <div class="forecast-header">some</div>
+                        <div class="forecast-body">
+                            <div class="forecast-temperature">10°</div>
+                            <div class="forecast-icon">
+                                <i class="owf owf-200 owf-4x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="location">
+                <div class="location__map">   
+                </div>
+                <div class="location__coordinates coordinates">
+                    <span class="coordinates__latitude">coordinates__latitude</span>
+                    <span class="coordinates__longtitude">coordinates__longtitude</span>
+                </div>
+            </div>
+        
 
         </main>
     </div>
