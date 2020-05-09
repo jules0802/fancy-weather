@@ -1,11 +1,11 @@
 import 'bootstrap';
 import '../css/style.css';
 import '../css/style.scss';
-import './materialize.js';
+import './materialize';
 import './speech-recognition';
 
 
 document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('select');
-    var instances = M.FormSelect.init(elems, options);
+    let elems = document.querySelectorAll('select');   
+    let instances = M.FormSelect.init(elems);
   });

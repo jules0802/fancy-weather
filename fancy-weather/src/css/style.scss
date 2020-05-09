@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800,900&display=swap&subset=cyrillic,cyrillic-ext');
 @import 'materialize.scss';
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
 @mixin details {
     &::after {
@@ -39,6 +40,7 @@
 
 * {
     margin: 0;
+    box-sizing: border-box;
 }
 
 .hidden {
@@ -47,10 +49,11 @@
 
 body {
     font-family: 'Montserrat', sans-serif;
+    background-color: #fefefe;
 }
 
 .wrapper {
-    width: 90%;
+    margin: 20px;
 }
 
 .toolbar-container{
@@ -64,14 +67,62 @@ body {
 }
 
 .toolbar {
-    width: 30%;
+    width: 20%;
     display: flex;
     justify-content: space-evenly;
 }
 
 .tool-btn {
-    width: 40px;
+    width: 45px;
     background-color: #606060;
+    transition: all 0.5s;
+    cursor: pointer;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+    position: relative;
+
+    & span {
+        position: absolute;
+        top: 10px;
+        left: 8px;
+ 
+    }
+
+    &:hover {
+        opacity: 0.7;
+    }
+
+    &.active {
+        opacity: 0.7;
+    }
+}
+
+.input-field {
+    margin: 0;
+}
+
+.toolbar__refresh-background-btn {
+    background-image: url("../assets/images/refresh.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: #fff;
+    text-align: center;
+    padding-top: 8px;
+}
+
+.select-wrapper input.select-dropdown {
+    margin: 0;
+    padding-left: 3px;
+    border: none;
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;  
+
+    &:focus {
+        border: none;
+    }
 }
 
 .toolbar__temp-scale-select {
@@ -81,7 +132,7 @@ body {
 
 .search {
     width: 20%;
-    height: 40px;
+    height: 45px;
     display: flex;
     justify-content: center;
 }
@@ -130,7 +181,7 @@ body {
     opacity: 0.5;
     background-size: 34px;
     background-repeat: no-repeat;
-    background-position: -2px 3px;
+    background-position: -2px 6px;
     padding: 0 0 0 23px;
     width: 100%;
 

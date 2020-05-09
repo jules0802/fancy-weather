@@ -11827,7 +11827,7 @@ $jscomp.polyfill = function (e, r, p, m) {
         this._setValueToInput();
 
         // Add caret
-        var dropdownIcon = $('<svg class="caret" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+        var dropdownIcon = $('<svg class="caret" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z" fill="#fff"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
         this.$el.before(dropdownIcon[0]);
 
         // Initialize dropdown
