@@ -52,14 +52,14 @@ $icon-color: #4FFADA;
 }
 
 html {
- font-size: 16px;
+ //font-size: 16px;
 
- @media screen and (max-width: 650px) {
-     font-size: 12px;
+ @media screen and (max-width: 768px) and (min-width: 450px) {
+    font-size: 12px;
  }
 
  @media screen and (max-width: 450px) {
-     font-size: 8px;
+    font-size: 8px;
  }
 }
 
@@ -92,8 +92,6 @@ body {
      width: 40%;
     }
 }
-
-
 
 .tool-btn {
     width: 45px;
@@ -160,15 +158,13 @@ body {
     display: flex;
     justify-content: center;
 
-    @media screen and (max-width: 768px) {
-     width: 40%;
-    }   
-
-    @media screen and (max-width: 650px) {
-     width: 50%;
-    }
-
+    @media screen and (max-width: 768px) and (min-width: 650px) {
+        width: 40%;
+    }    
     
+    @media screen and (max-width: 650px) {
+        width: 50%; 
+    } 
 }
 
 .search__speech-button {
@@ -238,10 +234,10 @@ main {
     justify-content: space-evenly;
     align-items: center;
 
-     @media screen and (max-width: 768px) {
+    @media screen and (max-width: 768px) {
            flex-direction: column;
            height: 100vh;
-        }
+    }
 }
 
 .weather, 
@@ -252,10 +248,10 @@ main {
     padding: 0 30px;
 
     @media screen and (max-width: 768px) {
-           flex-direction: column;
-           height: 50%;
-           width: 100%;
-        }
+        flex-direction: column;
+        height: 50%;
+        width: 100%;
+    }
 }
 
 .weather__header {
@@ -300,20 +296,33 @@ main {
     font-style: normal;
     font-weight: bold;
 
+    @media screen and (max-width: 768px) {
+        justify-content: space-evenly;
+    }  
+
     & .current-weather__temperature {
         font-size: 15rem;
 
+        @media screen and (max-width: 900px) and (min-width: 650px) {
+           font-size: 13rem;
+        }
+
         @media screen and (max-width: 650px) {
            font-size: 10rem;
-        }
+        }        
     }
     
 
     & .current-weather__details {
-        background-color: rgb(105, 22, 54);
+        background-color: #691636;
         font-size: 1.5rem;
+
+        @media screen and (max-width: 900px)  {
+           font-size: 1rem;
+        }
         
         & .details__icon {
+            font-size: 1.5rem;
             color: $icon-color;
         }
     }
@@ -372,7 +381,6 @@ main {
         @media screen and (max-width: 768px) {
             clip-path: none;
         }
-
     }
 
     & .location__coordinates {

@@ -10,7 +10,7 @@ recognition.addEventListener('result', (e) => {
     .map((result) => result.transcript);
 
   if (e.results[0].isFinal && transcript) {
-    document.querySelector('input').value = transcript;
+    document.querySelector('.search__input').value = transcript;
   }
 });
 
@@ -20,7 +20,7 @@ document.querySelector('.search__speech-button').addEventListener('click', () =>
 
 
 recognition.addEventListener('end', () => {
-  if (document.querySelector('input').value) {
-    document.querySelector('.search__button').click();
+  if (document.querySelector('.search__input').value) {
+    document.querySelector('.search__general-button').click();
   }
 });
