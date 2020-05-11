@@ -11,16 +11,20 @@ export default class Layout {
   addToolBar() {
     // LEFT TOOLBAR
     const toolBarContainer = document.createElement('div');
-    toolBarContainer.className = 'toolbar-container__left toolbar';
+    toolBarContainer.className = 'toolbar-container';
 
     // fill ToolBar
+    const leftToolBar = document.createElement('div');
+    leftToolBar.className = 'toolbar-container__left toolbar';
+    toolBarContainer.appendChild(leftToolBar);
+
     const refreshBtn = document.createElement('div');
     refreshBtn.className = 'toolbar__refresh-background-btn tool-btn';
     const refreshIcon = document.createElement('i');
     refreshIcon.className = 'small material-icons';
     refreshIcon.innerText = 'sync';
     refreshBtn.appendChild(refreshIcon);
-    toolBarContainer.appendChild(refreshBtn);
+    leftToolBar.appendChild(refreshBtn);
 
     const selectLangContainer = document.createElement('div');
     selectLangContainer.className = 'toolbar__lang-select tool-btn input-field col s12';
@@ -38,15 +42,15 @@ export default class Layout {
 
     switch (this.lang) {
       case 'en': {
-        enOption.setAttribute('selected');
+        enOption.setAttribute('selected', true);
         break;
       }
       case 'ru': {
-        ruOption.setAttribute('selected');
+        ruOption.setAttribute('selected', true);
         break;
       }
       default: {
-        beOption.setAttribute('selected');
+        beOption.setAttribute('selected', true);
         break;
       }
     }
@@ -55,7 +59,7 @@ export default class Layout {
     selectLang.appendChild(ruOption);
     selectLang.appendChild(beOption);
     selectLangContainer.appendChild(selectLang);
-    toolBarContainer.appendChild(selectLangContainer);
+    leftToolBar.appendChild(selectLangContainer);
 
     const selectScaleBtns = document.createElement('div');
     selectScaleBtns.className = 'toolbar__temp-scale-select temp-scale-select';
@@ -80,8 +84,8 @@ export default class Layout {
 
     selectScaleBtns.appendChild(fahrenheitBtn);
     selectScaleBtns.appendChild(celsiusBtn);
-    toolBarContainer.appendChild(selectScaleBtns);
-    this.wrapper.appendChild(toolBarContainer);
+    leftToolBar.appendChild(selectScaleBtns);
+    
 
     // FORM
     const form = document.createElement('form');
@@ -92,7 +96,7 @@ export default class Layout {
     input.className = 'search__input browser-default';
     input.setAttribute('type', 'text');
     input.setAttribute('placeholder', 'Search city or ZIP');
-    input.setAttribute('autofocus');
+    input.setAttribute('autofocus', true);
 
     form.appendChild(input);
 
@@ -106,7 +110,9 @@ export default class Layout {
     searchButton.innerText = 'Search';
     form.appendChild(searchButton);
 
-    this.wrapper.appendChild(form);
+    toolBarContainer.appendChild(form);
+
+    this.wrapper.appendChild(toolBarContainer);
   }
 
   addMain() {
