@@ -85,7 +85,7 @@ export default class Layout {
     selectScaleBtns.appendChild(fahrenheitBtn);
     selectScaleBtns.appendChild(celsiusBtn);
     leftToolBar.appendChild(selectScaleBtns);
-    
+
 
     // FORM
     const form = document.createElement('form');
@@ -95,7 +95,7 @@ export default class Layout {
     const input = document.createElement('input');
     input.className = 'search__input browser-default';
     input.setAttribute('type', 'text');
-    input.setAttribute('placeholder', 'Search city or ZIP');
+    input.setAttribute('placeholder', 'Search city');
     input.setAttribute('autofocus', true);
 
     form.appendChild(input);
@@ -143,6 +143,7 @@ export default class Layout {
 
     const currentTemperature = document.createElement('div');
     currentTemperature.className = 'current-weather__temperature';
+    currentTemperature.insertAdjacentHTML('afterbegin', '<span class="current-temperature-value"></span>°');
     currentWeather.appendChild(currentTemperature);
 
     const currentWeatherDetails = document.createElement('div');
@@ -159,14 +160,17 @@ export default class Layout {
 
     const detailsFeelings = document.createElement('div');
     detailsFeelings.className = 'details__feelings';
+    detailsFeelings.insertAdjacentHTML('afterbegin', 'FEELS LIKE: <span class="feelings-value"></span>°');
     currentWeatherDetails.appendChild(detailsFeelings);
 
     const detailsWind = document.createElement('div');
     detailsWind.className = 'details__wind';
+    detailsWind.insertAdjacentHTML('afterbegin', 'WIND: <span class="wind-value"></span>m/s');
     currentWeatherDetails.appendChild(detailsWind);
 
     const detailsHumidity = document.createElement('div');
     detailsHumidity.className = 'details__humidity';
+    detailsHumidity.insertAdjacentHTML('afterbegin', 'HUMIDITY: <span class="humidity-value"></span>%');
     currentWeatherDetails.appendChild(detailsHumidity);
 
     currentWeather.appendChild(currentWeatherDetails);
@@ -218,6 +222,7 @@ export default class Layout {
 
     const locationMap = document.createElement('div');
     locationMap.className = 'location__map';
+    locationMap.setAttribute('id', 'map-container');
     locationContainer.appendChild(locationMap);
 
     const locationCoordinates = document.createElement('div');
@@ -225,11 +230,13 @@ export default class Layout {
 
     const latitude = document.createElement('span');
     latitude.className = 'coordinates__latitude';
+    latitude.insertAdjacentHTML('afterbegin', '<span>Latitude: </span><span class="latitude-value"></span>');
     locationCoordinates.appendChild(latitude);
 
-    const longtitude = document.createElement('span');
-    longtitude.className = 'coordinates__longtitude';
-    locationCoordinates.appendChild(longtitude);
+    const longitude = document.createElement('span');
+    longitude.className = 'coordinates__longitude';
+    longitude.insertAdjacentHTML('afterbegin', '<span>Longitude: </span><span class="longitude-value"></span>');
+    locationCoordinates.appendChild(longitude);
 
     locationContainer.appendChild(locationCoordinates);
 

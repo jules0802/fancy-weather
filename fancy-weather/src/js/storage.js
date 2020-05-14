@@ -14,6 +14,8 @@ function getScaleFromStorage() {
   return localStorage.getItem('selectedScale') || 'c';
 }
 
+const store = { lang: getLanguageFromStorage(), scale: getScaleFromStorage() };
+
 export {
-  saveLanguageToStorage, getLanguageFromStorage, saveScaleToStorage, getScaleFromStorage,
+  saveLanguageToStorage, getLanguageFromStorage, saveScaleToStorage, getScaleFromStorage, store,
 };

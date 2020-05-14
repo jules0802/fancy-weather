@@ -6,9 +6,11 @@ import './materialize';
 import enableSpeechRecognition from './speech-recognition';
 import Layout from './Layout';
 import {
-  saveLanguageToStorage, getLanguageFromStorage, saveScaleToStorage, getScaleFromStorage,
+  saveLanguageToStorage, getLanguageFromStorage, saveScaleToStorage, getScaleFromStorage, store,
 } from './storage';
 import CurrentDate from './CurrentDate';
+import getCurrentPositionCoordinates from './getCurrentGeoData';
+
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -16,9 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const instances = M.FormSelect.init(elems);
   enableSpeechRecognition();
 });
-
-
-const store = { lang: getLanguageFromStorage(), scale: getScaleFromStorage() };
 
 const layout = new Layout(store);
 layout.addToolBar();
@@ -30,3 +29,5 @@ currentDate.updateTimeOnPage();
 setInterval(() => {
   new CurrentDate().updateTimeOnPage();
 }, 1000);
+
+getCurrentPositionCoordinates();
