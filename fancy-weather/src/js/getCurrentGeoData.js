@@ -1,6 +1,7 @@
 import mapboxgl from 'mapbox-gl';
 import { ipInfoToken, openCageToken, mapBoxToken } from './constants';
 import { store } from './storage';
+import { getWeather } from './getWeather';
 
 async function showGeoData(coords) {
   console.log(coords);
@@ -28,6 +29,7 @@ function getCurrentPositionCoordinates() {
     console.log(`Плюс-минус ${crd.accuracy} метров.`);
 
     showGeoData([crd.latitude, crd.longitude]);
+    getWeather(crd);
   }
 
   async function error(err) {
