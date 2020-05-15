@@ -151,27 +151,32 @@ export default class Layout {
 
     const detailsIconContainer = document.createElement('div');
     detailsIconContainer.className = 'details__icon';
-    detailsIconContainer.insertAdjacentHTML('afterbegin', '<i class="owf owf-200 owf-5x"></i>');
+    detailsIconContainer.insertAdjacentHTML('afterbegin', '<object type="image/svg+xml" data="" width="180" height="180" class="current-weather-icon"></object>')
+    //detailsIconContainer.insertAdjacentHTML('afterbegin', '<i class="owf owf-200 owf-5x"></i>');
     currentWeatherDetails.appendChild(detailsIconContainer);
+
+    const textDetails = document.createElement('div');
+    textDetails.className = 'text-details';
+    currentWeatherDetails.appendChild(textDetails);
 
     const detailsDescription = document.createElement('div');
     detailsDescription.className = 'details__description';
-    currentWeatherDetails.appendChild(detailsDescription);
+    textDetails.appendChild(detailsDescription);
 
     const detailsFeelings = document.createElement('div');
     detailsFeelings.className = 'details__feelings';
     detailsFeelings.insertAdjacentHTML('afterbegin', 'FEELS LIKE: <span class="feelings-value"></span>°');
-    currentWeatherDetails.appendChild(detailsFeelings);
+    textDetails.appendChild(detailsFeelings);
 
     const detailsWind = document.createElement('div');
     detailsWind.className = 'details__wind';
     detailsWind.insertAdjacentHTML('afterbegin', 'WIND: <span class="wind-value"></span>m/s');
-    currentWeatherDetails.appendChild(detailsWind);
+    textDetails.appendChild(detailsWind);
 
     const detailsHumidity = document.createElement('div');
     detailsHumidity.className = 'details__humidity';
     detailsHumidity.insertAdjacentHTML('afterbegin', 'HUMIDITY: <span class="humidity-value"></span>%');
-    currentWeatherDetails.appendChild(detailsHumidity);
+    textDetails.appendChild(detailsHumidity);
 
     currentWeather.appendChild(currentWeatherDetails);
     weatherContainer.appendChild(currentWeather);
@@ -202,11 +207,12 @@ export default class Layout {
 
       const fcstTemperature = document.createElement('div');
       fcstTemperature.className = 'forecast-temperature';
+      fcstTemperature.insertAdjacentHTML('afterbegin', '<span class="fcst-temp-value"></span>°')
       fcstBody.appendChild(fcstTemperature);
 
       const fcstIcon = document.createElement('div');
       fcstIcon.className = 'forecast-icon';
-      fcstIcon.insertAdjacentHTML('afterbegin', '<i class="owf owf-200 owf-4x"></i>');
+      fcstIcon.insertAdjacentHTML('afterbegin', '<object type="image/svg+xml" data="" width="100" height="100" class="fcst-weather-icon"></object>');
       fcstBody.appendChild(fcstIcon);
 
       day.appendChild(fcstBody);

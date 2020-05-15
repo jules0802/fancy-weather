@@ -4,7 +4,6 @@
 @import 'owfont-regular.css';
 @import url('https://api.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.css');
 
-
 $icon-color: #4FFADA; 
 
 @mixin details {
@@ -54,23 +53,29 @@ $icon-color: #4FFADA;
 
 html {
  //font-size: 16px;
+    background-size: cover;   
+    background-repeat: no-repeat;
+    box-shadow:inset 0 0 0 3000px rgba(0, 0, 0, 0.4);
+    height: 100%;
+    min-height:100%;
 
  @media screen and (max-width: 768px) and (min-width: 450px) {
     font-size: 12px;
  }
 
- @media screen and (max-width: 450px) {
+ @media screen and (max-width: 560px) {
     font-size: 8px;
+    background-size: auto 100%;  
  }
 }
 
-body {
+body { 
     font-family: 'Montserrat', sans-serif;
-    background-color: #fefefe;
 }
 
 .wrapper {
-    margin: 20px;
+    padding: 20px;
+    height: 100%;
 }
 
 //toolbar 
@@ -227,7 +232,7 @@ body {
 //main
 
 main {
-    background-color: grey;
+    //background-color: grey;
     margin-top: 10px;
     height: 85vh;
     display: flex;
@@ -237,7 +242,7 @@ main {
 
     @media screen and (max-width: 768px) {
            flex-direction: column;
-           height: 100vh;
+           //height: 100vh;
     }
 }
 
@@ -245,7 +250,7 @@ main {
 .location {
     width: 58%;
     height: 90%;
-    background-color:#7e2b2b;
+    //background-color:#7e2b2b;
     padding: 0 30px;
 
     @media screen and (max-width: 768px) {
@@ -260,7 +265,7 @@ main {
     flex-direction: column;
     justify-content: space-evenly;
     align-items: start;
-    background-color: green;
+    //background-color: green;
     height: 15%;    
     color: #FFFFFF;
 
@@ -269,7 +274,7 @@ main {
         }
 
     & .header__location {
-        background-color: red;
+       // background-color: red;
         height: 60%;
         font-style: normal;
         font-weight: bold;
@@ -280,7 +285,7 @@ main {
 
      & .header__date {
         height: 40%;
-        background-color: blue;     
+       // background-color: blue;     
         font-style: normal;
         font-weight: 600;
         font-size: 1.5rem;
@@ -289,11 +294,10 @@ main {
 
 .current-weather {
     height: 50%;
-    background-color: violet;
+ //   background-color: violet;
     display: flex;
     justify-content: space-between;
     color: #FFFFFF;
-    text-transform: uppercase;
     font-style: normal;
     font-weight: bold;
 
@@ -315,23 +319,34 @@ main {
     
 
     & .current-weather__details {
-        background-color: #691636;
+      //  background-color: #691636;
         font-size: 1.5rem;
 
         @media screen and (max-width: 900px)  {
            font-size: 1rem;
         }
+
+        & .text-details {
+            margin-top: -40px;
+            
+            @media screen and (max-width: 900px)  {
+              margin-top: -50px;
+            }
+        }
+
+        & .details__description {
+            text-transform: uppercase;
+        }
         
         & .details__icon {
-            font-size: 1.5rem;
-            color: $icon-color;
+          margin-top: -30px;
         }
     }
 }
 
 .forecast-container {
     height: 30%;
-    background: black;
+    //background: black;
     color: #FFFFFF;
     text-transform: uppercase;
     font-style: normal;
@@ -339,8 +354,10 @@ main {
     display: flex; 
     justify-content: space-between;
 
-    & :nth-child(n+1) {
-        background: darkblue;
+    & .forecast-container__first,
+    .forecast-container__second,
+    .forecast-container__third  {
+       // background: darkblue;
         width: 30%;
     }
 
@@ -370,27 +387,36 @@ main {
 
 .location {
     width: 39%;
-    background-color:rgb(14, 14, 36);
+    //background-color:rgb(14, 14, 36);
     padding: 0;
+
+    @media screen and (max-width: 768px) {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+    }
 
     & .location__map { 
         width: 100%;
         height: 80%;
-        background: lightblue;
+        //background: lightblue;
         clip-path: polygon(50% 0%, 50% 0%, 100% 25%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
 
         @media screen and (max-width: 768px) {
             clip-path: none;
+            width: 50%;
         }
     }
 
     & .location__coordinates {
         margin-top: 10px;
-        background: red;
+       // background: red;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         align-items: center;
         color: #FFFFFF;
+        height: fit-content;
     }
 }

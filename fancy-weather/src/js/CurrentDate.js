@@ -31,6 +31,7 @@ export default class CurrentDate {
 
   updateTimeOnPage(timeZone) {
     document.querySelector('.header__date span').innerText = this.currentDateToString(timeZone);
+    this.showForecastHeader();
   }
 
   getCurrentDayOfWeek() {
@@ -39,5 +40,12 @@ export default class CurrentDate {
 
   getCurrentMonth() {
     return MONTHS[this.date.getMonth()];
+  }
+
+  showForecastHeader() {
+    const today = this.date.getDay()-1;
+    document.querySelector('.forecast-container__first .forecast-header').innerText = DAYS_OF_WEEK[(today+1)%7];
+    document.querySelector('.forecast-container__second .forecast-header').innerText = DAYS_OF_WEEK[(today+2)%7];
+    document.querySelector('.forecast-container__third .forecast-header').innerText = DAYS_OF_WEEK[(today+3)%7];
   }
 }
