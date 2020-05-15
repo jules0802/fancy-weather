@@ -127,7 +127,7 @@ export default class Layout {
 
     const headerLocation = document.createElement('div');
     headerLocation.className = 'header__location';
-    headerLocation.insertAdjacentHTML('afterbegin', '<i class="material-icons">location_on</i><span span ></span>');
+    headerLocation.insertAdjacentHTML('afterbegin', '<i class="material-icons">location_on</i><span></span>');
     header.appendChild(headerLocation);
 
     const headerDate = document.createElement('div');
@@ -152,7 +152,6 @@ export default class Layout {
     const detailsIconContainer = document.createElement('div');
     detailsIconContainer.className = 'details__icon';
     detailsIconContainer.insertAdjacentHTML('afterbegin', '<object type="image/svg+xml" data="" width="180" height="180" class="current-weather-icon"></object>')
-    //detailsIconContainer.insertAdjacentHTML('afterbegin', '<i class="owf owf-200 owf-5x"></i>');
     currentWeatherDetails.appendChild(detailsIconContainer);
 
     const textDetails = document.createElement('div');
@@ -165,17 +164,17 @@ export default class Layout {
 
     const detailsFeelings = document.createElement('div');
     detailsFeelings.className = 'details__feelings';
-    detailsFeelings.insertAdjacentHTML('afterbegin', 'FEELS LIKE: <span class="feelings-value"></span>°');
+    detailsFeelings.insertAdjacentHTML('afterbegin', '<span class="feelings-text">FEELS LIKE: </span><span class="feelings-value"></span>°');
     textDetails.appendChild(detailsFeelings);
 
     const detailsWind = document.createElement('div');
     detailsWind.className = 'details__wind';
-    detailsWind.insertAdjacentHTML('afterbegin', 'WIND: <span class="wind-value"></span>m/s');
+    detailsWind.insertAdjacentHTML('afterbegin', '<span class="wind-text">WIND: </span><span class="wind-value"></span><span class="wind-units">m/s</span>');
     textDetails.appendChild(detailsWind);
 
     const detailsHumidity = document.createElement('div');
     detailsHumidity.className = 'details__humidity';
-    detailsHumidity.insertAdjacentHTML('afterbegin', 'HUMIDITY: <span class="humidity-value"></span>%');
+    detailsHumidity.insertAdjacentHTML('afterbegin', '<span class="humidity-text">HUMIDITY: </span><span class="humidity-value"></span>%');
     textDetails.appendChild(detailsHumidity);
 
     currentWeather.appendChild(currentWeatherDetails);

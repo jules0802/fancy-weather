@@ -1,4 +1,6 @@
-const DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+const DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((el) => el.toUpperCase());
+const DAYS_OF_WEEK_RU = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'].map((el) => el.toUpperCase());
+const DAYS_OF_WEEK_BE = ['Панядзелак', 'Аўторак', 'Асяроддзе', 'Чацвер', 'Пятніца', 'Субота', 'Нядзеля'].map((el) => el.toUpperCase());
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const ipInfoToken = 'df8d7fa9b9577f';
 const openCageToken = '738f6b21910545658067b56a17e900ee';
@@ -24,8 +26,11 @@ const weatherIcons = {
   '13n': '../assets/icons/snow.svg',
   '50d': '../assets/icons/mist.svg',
   '50n': '../assets/icons/mist.svg',
-}
+};
+const yandexTranslateToken = 'trnsl.1.1.20200428T081135Z.f88f4d02b6e83ecd.cdf6646574cac6cb030efeccb1517e02ee735ed2';
 
 export {
-  DAYS_OF_WEEK, MONTHS, ipInfoToken, openCageToken, mapBoxToken, openWeatherToken, weatherIcons, unsplashToken
+  DAYS_OF_WEEK, DAYS_OF_WEEK_RU, DAYS_OF_WEEK_BE,
+  MONTHS, ipInfoToken, openCageToken, mapBoxToken, openWeatherToken,
+  weatherIcons, unsplashToken, yandexTranslateToken,
 };

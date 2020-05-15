@@ -46,11 +46,6 @@ async function getCurrentIPGeoData() {
   const res = await fetch(url);
   const data = await res.json();
   console.log(data);
-  // [document.querySelector('.coordinates__latitude .latitude-value').innerText,
-  //   document.querySelector('.coordinates__longitude .longitude-value').innerText] = data.loc.split(',').map((el) => `${el.split('.')[0]}°${String((+el).toFixed(2)).split('.')[1]}'`);
-
-  // document.querySelector('.header__location span').innerText = `${data.city}, ${await getFullCountryName(data.loc)}`;
-  // addMap(data.loc.split(','));
   return data.loc;
 }
 

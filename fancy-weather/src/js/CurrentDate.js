@@ -1,4 +1,5 @@
 import { DAYS_OF_WEEK, MONTHS } from './constants';
+import { store } from './storage';
 
 export default class CurrentDate {
   constructor() {
@@ -17,7 +18,7 @@ export default class CurrentDate {
       hour12: false,
     };
 
-    let currentDateString = this.date.toLocaleString('en', options);
+    let currentDateString = this.date.toLocaleString(store.lang, options);
 
     const tempArr = currentDateString.split(' ');
     const day = tempArr[2].slice(0, -1);
@@ -31,7 +32,6 @@ export default class CurrentDate {
 
   updateTimeOnPage(timeZone) {
     document.querySelector('.header__date span').innerText = this.currentDateToString(timeZone);
-    this.showForecastHeader();
   }
 
   getCurrentDayOfWeek() {
@@ -43,9 +43,9 @@ export default class CurrentDate {
   }
 
   showForecastHeader() {
-    const today = this.date.getDay()-1;
-    document.querySelector('.forecast-container__first .forecast-header').innerText = DAYS_OF_WEEK[(today+1)%7];
-    document.querySelector('.forecast-container__second .forecast-header').innerText = DAYS_OF_WEEK[(today+2)%7];
-    document.querySelector('.forecast-container__third .forecast-header').innerText = DAYS_OF_WEEK[(today+3)%7];
+    const today = this.date.getDay() - 1;
+    document.querySelector('.forecast-container__first .forecast-header').innerText = DAYS_OF_WEEK[(today + 1) % 7];
+    document.querySelector('.forecast-container__second .forecast-header').innerText = DAYS_OF_WEEK[(today + 2) % 7];
+    document.querySelector('.forecast-container__third .forecast-header').innerText = DAYS_OF_WEEK[(today + 3) % 7];
   }
 }
