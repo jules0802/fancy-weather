@@ -13,14 +13,14 @@ import getCurrentPositionCoordinates from './getCurrentGeoData';
 import { updateBackground } from './background';
 import { recalc } from './getWeather';
 import { translatePage } from './translation';
+import { getWeather } from './getWeather';
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   const elems = document.querySelectorAll('select');
   const instances = M.FormSelect.init(elems);
   enableSpeechRecognition();
   updateBackground();
-
- 
+  getCurrentPositionCoordinates();
 });
 
 const layout = new Layout(store);
@@ -29,14 +29,11 @@ layout.addMain();
 
 const currentDate = new CurrentDate();
 currentDate.updateTimeOnPage();
+currentDate.showForecastHeader();
 
 setInterval(() => {
   new CurrentDate().updateTimeOnPage();
 }, 1000);
-
-currentDate.showForecastHeader();
-
-getCurrentPositionCoordinates();
 
 document.querySelector('.toolbar__refresh-background-btn').addEventListener('click', () => {
   updateBackground();
@@ -46,16 +43,17 @@ const fBtn = document.querySelector('.temp-scale-select__fahrenheit');
 const cBtn = document.querySelector('.temp-scale-select__celsius');
 
 document.querySelector('.toolbar__temp-scale-select').addEventListener('click', (event) => {
-  if (event.target.closest('.temp-scale-select__fahrenheit')) {
-    fBtn.classList.add('active');
-    cBtn.classList.remove('active');
+  if (event.target.closest('.temp-scale-select__fahrenheit') && !fBtn.classList.contains('active')) {
+    fBtn.classList.toggle('active');
+    cBtn.classList.toggle('active');
     store.scale = 'f';
-  } else {
-    cBtn.classList.add('active');
-    fBtn.classList.remove('active');
+    recalc();
+  } else if (event.target.closest('.temp-scale-select__celsius') && !cBtn.classList.contains('active')) {
+    cBtn.classList.toggle('active');
+    fBtn.classList.toggle('active');
     store.scale = 'c';
+    recalc();
   }
-  recalc();
   saveScaleToStorage(store.scale);
 });
 

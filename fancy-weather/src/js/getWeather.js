@@ -1,5 +1,6 @@
 import { openWeatherToken, weatherIcons } from './constants';
 import { store } from './storage';
+import { translatePage } from './translation';
 
 function getIconPath(weatherIconId) {
   return weatherIcons[weatherIconId];
@@ -65,7 +66,12 @@ function recalc() {
 }
 
 async function getWeather(coords) {
-  const url = `https://api.openweathermap.org/data/2.5/onecall?lat=${coords.latitude}&lon=${coords.longitude}&units=imperial&exclude=minutely,hourly&appid=${openWeatherToken}&lang=${store.lang}`;
+  let url = '';
+  if (store.lang !== 'be') {
+    url = `https://api.openweathermap.org/data/2.5/onecall?lat=${coords.latitude}&lon=${coords.longitude}&units=imperial&exclude=minutely,hourly&appid=${openWeatherToken}&lang=${store.lang}`;
+  } else {
+    url = `https://api.openweathermap.org/data/2.5/onecall?lat=${coords.latitude}&lon=${coords.longitude}&units=imperial&exclude=minutely,hourly&appid=${openWeatherToken}&lang=ru`;
+  }
   const res = await fetch(url);
   const data = await res.json();
   console.log(data);
