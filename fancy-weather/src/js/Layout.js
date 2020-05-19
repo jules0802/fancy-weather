@@ -102,6 +102,7 @@ export default class Layout {
 
     const speachButton = document.createElement('button');
     speachButton.className = 'search__speech-button';
+    speachButton.setAttribute('type', 'button');
     form.appendChild(speachButton);
 
     const searchButton = document.createElement('button');

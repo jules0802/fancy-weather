@@ -5,7 +5,7 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
 const ipInfoToken = 'df8d7fa9b9577f';
 const openCageToken = '738f6b21910545658067b56a17e900ee';
 const mapBoxToken = 'pk.eyJ1IjoianVsZXMwODAyIiwiYSI6ImNrYTU5cmlrajExeHEzbnBuMXBqbGg0dGkifQ.VL3SvWYyZDYt1ZA27u3exA';
-const openWeatherToken = 'af74c6625db364982fb9658984bb2b95';
+const openWeatherToken = '6dc1fdac99307a3792884d3464da6470';
 const unsplashToken = '-2TC2GgLDXXWzbhk2l4-AHyzoT2W02uxT5-o2NGoyo8';
 const weatherIcons = {
   '01d': '../assets/icons/clear_sky_day.svg',

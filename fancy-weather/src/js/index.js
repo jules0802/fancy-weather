@@ -9,11 +9,13 @@ import {
   saveLanguageToStorage, getLanguageFromStorage, saveScaleToStorage, getScaleFromStorage, store,
 } from './storage';
 import CurrentDate from './CurrentDate';
-import getCurrentPositionCoordinates from './getCurrentGeoData';
+import { getCurrentPositionCoordinates, showGeoData } from './getCurrentGeoData';
 import { updateBackground } from './background';
 import { recalc } from './getWeather';
 import { translatePage } from './translation';
 import { getWeather } from './getWeather';
+import { getRequestedGeoData } from './citySearch';
+
 
 document.addEventListener('DOMContentLoaded', async () => {
   const elems = document.querySelectorAll('select');
@@ -62,3 +64,27 @@ document.querySelector('select').addEventListener('change', (event) => {
   saveLanguageToStorage(store.lang);
   translatePage(store.lang);
 });
+
+
+const form = document.querySelector('.toolbar__search');
+const input = document.querySelector('.search__input');
+form.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  console.log(input.value)
+  updateBackground();
+  const data = await getRequestedGeoData(input.value);
+  console.log(data);
+  store.coords = { latitude: data.results[0].geometry.lat, longitude: data.results[0].geometry.lng };
+  await showGeoData([store.coords.latitude, store.coords.longitude]);
+
+  const currentLocalDate = new CurrentDate();
+  currentLocalDate.updateTimeOnPage(data.results[0].annotations.timezone.name);
+
+  currentLocalDate.showForecastHeader();
+
+  setInterval(() => {
+    currentLocalDate.updateTimeOnPage(data.results[0].annotations.timezone.name);
+  }, 1000);
+
+  await getWeather(store.coords);
+})

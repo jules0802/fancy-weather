@@ -38,14 +38,18 @@ function addMap(coords) {
     .addTo(map);
 }
 
-async function showGeoData(coords) {
-  console.log(coords);
+function showLatAndLng(coords) {
   [document.querySelector('.coordinates__latitude .latitude-value').innerText,
     document.querySelector('.coordinates__longitude .longitude-value').innerText] = coords.map((el) => ` ${String(el).split('.')[0]}°${((String((+el).toFixed(2)).split('.')[1] * 60) / 100).toFixed(0)}'`);
+}
+
+async function showGeoData(coords) {
+  console.log(coords);
+  showLatAndLng(coords);
 
   const placeName = await getLocalityName(coords.join());
-
-  document.querySelector('.header__location span').innerText = `${placeName.city}, ${placeName.country}`;
+  console.log('placeName', placeName);
+  document.querySelector('.header__location span').innerText = `${placeName.city || placeName.county}, ${placeName.country}`;
   addMap(coords);
 }
 
@@ -58,6 +62,7 @@ function getCurrentPositionCoordinates() {
 
   async function success(pos) {
     const crd = pos.coords;
+    console.log(crd);
     store.coords = crd;
     await showGeoData([crd.latitude, crd.longitude]);
     await getWeather(store.coords);
@@ -73,4 +78,4 @@ function getCurrentPositionCoordinates() {
   navigator.geolocation.getCurrentPosition(success, error, options);
 }
 
-export default getCurrentPositionCoordinates;
+export { getCurrentPositionCoordinates, showGeoData };
