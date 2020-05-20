@@ -1,4 +1,6 @@
-import { DAYS_OF_WEEK, MONTHS } from './constants';
+import {
+  DAYS_OF_WEEK, DAYS_OF_WEEK_RU, DAYS_OF_WEEK_BE, MONTHS,
+} from './constants';
 import { store } from './storage';
 
 export default class CurrentDate {
@@ -12,21 +14,13 @@ export default class CurrentDate {
       day: 'numeric',
       month: 'long',
       timeZone,
-      hour: 'numeric',
+      hour: '2-digit',
       minute: '2-digit',
       second: '2-digit',
       hour12: false,
     };
 
-    let currentDateString = this.date.toLocaleString(store.lang, options);
-
-    const tempArr = currentDateString.split(' ');
-    const day = tempArr[2].slice(0, -1);
-    tempArr[2] = `${tempArr[1]},`;
-    tempArr[1] = day;
-
-    currentDateString = tempArr.join(' ');
-
+    const currentDateString = this.date.toLocaleString(store.lang, options);
     return currentDateString;
   }
 
@@ -42,10 +36,60 @@ export default class CurrentDate {
     return MONTHS[this.date.getMonth()];
   }
 
+  getCurrentPartOfDay(timeZone) {
+    const hours = this.currentDateToString(timeZone).slice(-8, -6);
+    console.log(hours);
+    if (hours >= 5 && hours < 12) return 'morning';
+    if (hours >= 12 && hours < 16) return 'afternoon';
+    if (hours >= 16 && hours < 23) return 'evening';
+    return 'night';
+  }
+
+  getCurrentSeason() {
+    const month = this.date.getMonth();
+    switch (month) {
+      case 0:
+      case 1:
+      case 11: {
+        return 'winter';
+      }
+      case 2:
+      case 3:
+      case 4: {
+        return 'spring';
+      }
+      case 5:
+      case 6:
+      case 7: {
+        return 'summer';
+      }
+      default: {
+        return 'autumn';
+      }
+    }
+  }
+
   showForecastHeader() {
     const today = this.date.getDay() - 1;
-    document.querySelector('.forecast-container__first .forecast-header').innerText = DAYS_OF_WEEK[(today + 1) % 7];
-    document.querySelector('.forecast-container__second .forecast-header').innerText = DAYS_OF_WEEK[(today + 2) % 7];
-    document.querySelector('.forecast-container__third .forecast-header').innerText = DAYS_OF_WEEK[(today + 3) % 7];
+    switch (store.lang) {
+      case 'en': {
+        document.querySelector('.forecast-container__first .forecast-header').innerText = DAYS_OF_WEEK[(today + 1) % 7];
+        document.querySelector('.forecast-container__second .forecast-header').innerText = DAYS_OF_WEEK[(today + 2) % 7];
+        document.querySelector('.forecast-container__third .forecast-header').innerText = DAYS_OF_WEEK[(today + 3) % 7];
+        break;
+      }
+      case 'ru': {
+        document.querySelector('.forecast-container__first .forecast-header').innerText = DAYS_OF_WEEK_RU[(today + 1) % 7];
+        document.querySelector('.forecast-container__second .forecast-header').innerText = DAYS_OF_WEEK_RU[(today + 2) % 7];
+        document.querySelector('.forecast-container__third .forecast-header').innerText = DAYS_OF_WEEK_RU[(today + 3) % 7];
+        break;
+      }
+      default: {
+        document.querySelector('.forecast-container__first .forecast-header').innerText = DAYS_OF_WEEK_BE[(today + 1) % 7];
+        document.querySelector('.forecast-container__second .forecast-header').innerText = DAYS_OF_WEEK_BE[(today + 2) % 7];
+        document.querySelector('.forecast-container__third .forecast-header').innerText = DAYS_OF_WEEK_BE[(today + 3) % 7];
+        break;
+      }
+    }
   }
 }

@@ -275,16 +275,16 @@ main {
 
     & .header__location {
        // background-color: red;
-        height: 60%;
+        //height: 60%;
         font-style: normal;
         font-weight: bold;
-        font-size: 3rem;
+        font-size: 2rem;
         line-height: 4rem;
         text-transform: uppercase;        
     }
 
      & .header__date {
-        height: 40%;
+       // height: 40%;
        // background-color: blue;     
         font-style: normal;
         font-weight: 600;
@@ -321,7 +321,7 @@ main {
 
     & .current-weather__details {
       //  background-color: #691636;
-        font-size: 1.5rem;
+        font-size: 1rem;
         text-transform: uppercase;
 
         @media screen and (max-width: 900px)  {
@@ -344,6 +344,7 @@ main {
 
 .forecast-container {
     height: 30%;
+    margin-top: 20px;
     //background: black;
     color: #FFFFFF;
     text-transform: uppercase;
