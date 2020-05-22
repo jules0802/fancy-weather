@@ -1,45 +1,83 @@
-
 import 'bootstrap';
 import '../css/style.css';
 import '../css/style.scss';
 import './materialize';
-import enableSpeechRecognition from './speech-recognition';
+import './preload_img';
 import Layout from './Layout';
 import {
-  saveLanguageToStorage, getLanguageFromStorage, saveScaleToStorage, getScaleFromStorage, store,
+  saveLanguageToStorage, saveScaleToStorage, store,
 } from './storage';
 import CurrentDate from './CurrentDate';
-import { getCurrentPositionCoordinates, showGeoData } from './getCurrentGeoData';
+import { getCurrentPositionCoordinates, showGeoData, updateGeoData } from './getCurrentGeoData';
 import { updateBackground } from './background';
-import { recalc } from './getWeather';
-import { translatePage } from './translation';
-import { getWeather } from './getWeather';
+import { recalc, getWeather } from './getWeather';
+import { translatePage, translateVoiceNotificationBtn } from './translation';
 import { getRequestedGeoData } from './citySearch';
-
+import { generateMessageToSay, setVoice } from './speechSynthesis';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const elems = document.querySelectorAll('select');
-  const instances = M.FormSelect.init(elems); 
-  enableSpeechRecognition();
+  // eslint-disable-next-line
+  const instances = M.FormSelect.init(elems);
 });
 getCurrentPositionCoordinates();
 
+// Layout
 const layout = new Layout(store);
 layout.addToolBar();
 layout.addMain();
 
+// Speech Recognition
+window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const speechBtn = document.querySelector('.search__speech-button');
+// eslint-disable-next-line no-undef
+const recognition = new SpeechRecognition();
+recognition.interimResults = true;
+recognition.lang = store.lang;
+recognition.addEventListener('result', (e) => {
+  const transcript = Array.from(e.results)
+    .map((result) => result[0])
+    .map((result) => result.transcript);
+
+  if (e.results[0].isFinal && transcript) {
+    document.querySelector('.search__input').value = transcript;
+  }
+});
+
+speechBtn.addEventListener('click', (event) => {
+  event.preventDefault();
+  if (!speechBtn.classList.contains('active')) {
+    speechBtn.classList.add('active');
+    recognition.start();
+  } else {
+    speechBtn.classList.remove('active');
+    speechBtn.blur();
+    recognition.stop();
+  }
+});
+
+recognition.addEventListener('end', () => {
+  if (document.querySelector('.search__input').value) {
+    document.querySelector('.search__general-button').click();
+  }
+  speechBtn.classList.remove('active');
+  speechBtn.blur();
+});
+
+// Date
 const currentDate = new CurrentDate();
 currentDate.updateTimeOnPage();
 currentDate.showForecastHeader();
 store.season = currentDate.getCurrentSeason();
 store.dayPart = currentDate.getCurrentPartOfDay();
-console.log(store.season);
-console.log(store.dayPart);
-updateBackground(store.season, store.dayPart);
+const prom1 = updateBackground(store.season, store.dayPart);
+prom1.then(() => { document.querySelector('.loader').classList.add('hidden'); });
 
 const generalIntervalTimeRefresh = window.setInterval(() => {
   new CurrentDate().updateTimeOnPage();
 }, 1000);
+
+// Event Listeners
 
 document.querySelector('.toolbar__refresh-background-btn').addEventListener('click', () => {
   updateBackground(store.season, store.dayPart);
@@ -67,6 +105,7 @@ document.querySelector('select').addEventListener('change', (event) => {
   store.lang = event.target.value;
   saveLanguageToStorage(store.lang);
   translatePage(store.lang);
+  recognition.lang = store.lang;
 });
 
 
@@ -77,24 +116,49 @@ let intervalLocalTimeRefresh;
 
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
+  document.querySelector('.loader').classList.add('hidden');
+  document.querySelectorAll('.search button').forEach((btn) => btn.blur());
   clearInterval(generalIntervalTimeRefresh);
   clearInterval(intervalLocalTimeRefresh);
-  console.log(input.value);  
   const data = await getRequestedGeoData(input.value);
-  console.log(data);
   store.coords = { latitude: data.results[0].geometry.lat, longitude: data.results[0].geometry.lng };
-  await showGeoData([store.coords.latitude, store.coords.longitude]);
+  await updateGeoData([store.coords.latitude, store.coords.longitude]);
 
   const currentLocalDate = new CurrentDate();
   currentLocalDate.updateTimeOnPage(data.results[0].annotations.timezone.name);
   currentLocalDate.showForecastHeader();
   store.season = currentLocalDate.getCurrentSeason();
   store.dayPart = currentLocalDate.getCurrentPartOfDay(data.results[0].annotations.timezone.name);
-  updateBackground(store.season, store.dayPart);
+  await updateBackground(store.season, store.dayPart);
 
   intervalLocalTimeRefresh = window.setInterval(() => {
     new CurrentDate().updateTimeOnPage(data.results[0].annotations.timezone.name);
   }, 1000);
 
   await getWeather(store.coords);
-})
+  document.querySelector('.loader').classList.remove('hidden');
+});
+
+const voiceNotification = document.querySelector('.toolbar__voice-notification');
+let clicksCount = 0;
+voiceNotification.addEventListener('click', () => {
+  clicksCount += 1;
+  if (clicksCount === 1) {
+    speechSynthesis.getVoices();
+    voiceNotification.innerText = 'Listen to weather';
+    translateVoiceNotificationBtn();
+  } else if (!speechSynthesis.speaking) {
+    voiceNotification.innerText = 'Stop';
+    translateVoiceNotificationBtn();
+    const msg = new SpeechSynthesisUtterance();
+    msg.text = generateMessageToSay();
+    msg.voice = setVoice();
+    console.log(store);
+    console.log(msg.voice);
+    speechSynthesis.speak(msg);
+  } else {
+    speechSynthesis.cancel();
+    voiceNotification.innerText = 'Listen to weather';
+    translateVoiceNotificationBtn();
+  }
+});

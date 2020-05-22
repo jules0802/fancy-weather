@@ -38,9 +38,8 @@ export default class CurrentDate {
 
   getCurrentPartOfDay(timeZone) {
     const hours = this.currentDateToString(timeZone).slice(-8, -6);
-    console.log(hours);
     if (hours >= 5 && hours < 12) return 'morning';
-    if (hours >= 12 && hours < 16) return 'afternoon';
+    if (hours >= 12 && hours < 16) return 'day';
     if (hours >= 16 && hours < 23) return 'evening';
     return 'night';
   }

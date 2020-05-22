@@ -86,6 +86,12 @@ export default class Layout {
     selectScaleBtns.appendChild(celsiusBtn);
     leftToolBar.appendChild(selectScaleBtns);
 
+    // Voice weather
+    const voiceNotificationBtn = document.createElement('div');
+    voiceNotificationBtn.className = 'toolbar__voice-notification tool-btn';
+    voiceNotificationBtn.innerText = 'Activate Voice Weather';
+    toolBarContainer.appendChild(voiceNotificationBtn);
+  
 
     // FORM
     const form = document.createElement('form');

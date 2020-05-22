@@ -23,19 +23,34 @@ function addMap(coords) {
   // eslint-disable-next-line no-param-reassign
   coords = coords.reverse();
   mapboxgl.accessToken = mapBoxToken;
-  const map = new mapboxgl.Map({
+  store.map = new mapboxgl.Map({
     container: 'map-container',
     style: 'mapbox://styles/mapbox/streets-v11',
-    zoom: 14,
+    zoom: 8,
     center: coords,
     pitch: 80,
     antialias: true,
   });
 
   // eslint-disable-next-line no-unused-vars
-  const marker = new mapboxgl.Marker()
+  store.marker = new mapboxgl.Marker()
     .setLngLat(coords)
-    .addTo(map);
+    .addTo(store.map);
+}
+
+function updateMap(coords) {
+  // eslint-disable-next-line no-param-reassign
+  coords = coords.reverse();
+  store.map.flyTo({
+    center: coords,
+    zoom: 8,
+    speed: 1,
+    curve: 1,
+    easing(t) {
+      return t;
+    }
+  });
+  store.marker.setLngLat(coords).addTo(store.map);
 }
 
 function showLatAndLng(coords) {
@@ -51,6 +66,16 @@ async function showGeoData(coords) {
   console.log('placeName', placeName);
   document.querySelector('.header__location span').innerText = `${placeName.city || placeName.county}, ${placeName.country}`;
   addMap(coords);
+}
+
+async function updateGeoData(coords) {
+  console.log(coords);
+  showLatAndLng(coords);
+
+  const placeName = await getLocalityName(coords.join());
+  console.log('placeName', placeName);
+  document.querySelector('.header__location span').innerText = `${placeName.city || placeName.county}, ${placeName.country}`;
+  updateMap(coords);
 }
 
 function getCurrentPositionCoordinates() {
@@ -78,4 +103,4 @@ function getCurrentPositionCoordinates() {
   navigator.geolocation.getCurrentPosition(success, error, options);
 }
 
-export { getCurrentPositionCoordinates, showGeoData };
+export { getCurrentPositionCoordinates, showGeoData, updateGeoData };

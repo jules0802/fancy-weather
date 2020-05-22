@@ -42,6 +42,31 @@ function translateDayOfWeek(str, toLang) {
   return result;
 }
 
+function translateVoiceNotificationBtn() {
+  const posStates = {
+    activate: ['Activate Voice Weather', 'Активировать Голосовую Погоду', 'Актываваць Галасавую Надвор\'е'],
+    listen: ['Listen to weather', 'Прослушать погоду', 'Праслухаць надвор\'е'],
+    stop: ['Stop', 'Остановить', 'Спыніць']
+  };
+  const voiceNotification = document.querySelector('.toolbar__voice-notification');
+  const currentState = Object.keys(posStates).find((key) => posStates[key].includes(voiceNotification.innerText));
+  console.log(currentState);
+  switch (store.lang) {
+    case 'en': {
+      voiceNotification.innerText = posStates[currentState][0];
+      break;
+    }
+    case 'ru': {
+      voiceNotification.innerText = posStates[currentState][1];
+      break;
+    }
+    default: {
+      voiceNotification.innerText = posStates[currentState][2];
+      break;
+    }
+  }
+}
+
 async function translatePage(toLang) {
   const textNodesToBeTranslated = [
     document.querySelector('.details__description'),
@@ -85,7 +110,11 @@ async function translatePage(toLang) {
     document.querySelector('.forecast-container__third .forecast-header')].forEach((el) => {
     // eslint-disable-next-line no-param-reassign
     el.innerText = translateDayOfWeek(el.innerText, toLang);
+
+      translateVoiceNotificationBtn();
   });
 }
 
-export { translatePage };
+
+
+export { translatePage, translateVoiceNotificationBtn };
