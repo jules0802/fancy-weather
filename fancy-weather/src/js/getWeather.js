@@ -29,13 +29,12 @@ function getDayTime(data) {
 
 
 function showForecast(data) {
-  document.querySelector('.forecast-container__first .fcst-weather-icon').setAttribute('data', getIconPath(data[0].weather[0].icon));
-  document.querySelector('.forecast-container__second .fcst-weather-icon').setAttribute('data', getIconPath(data[1].weather[0].icon));
-  document.querySelector('.forecast-container__third .fcst-weather-icon').setAttribute('data', getIconPath(data[2].weather[0].icon));
-
-  document.querySelector('.forecast-container__first .fcst-temp-value').innerText = store.scale === 'f' ? Math.round(data[0].temp.day) : calcFtoC(data[0].temp.day);
-  document.querySelector('.forecast-container__second .fcst-temp-value').innerText = store.scale === 'f' ? Math.round(data[1].temp.day) : calcFtoC(data[1].temp.day);
-  document.querySelector('.forecast-container__third .fcst-temp-value').innerText = store.scale === 'f' ? Math.round(data[2].temp.day) : calcFtoC(data[2].temp.day);
+  document.querySelector('.forecast-container').children.forEach((element, index) => {
+    const temperature = element.querySelector('.fcst-temp-value');
+    temperature.innerText = store.scale === 'f' ? Math.round(data[index].temp.day) : calcFtoC(data[index].temp.day);
+    temperature.setAttribute('data-desc', data[index].weather[0].main);
+    element.querySelector('.fcst-weather-icon').setAttribute('data', getIconPath(data[index].weather[0].icon));
+  });
 }
 
 
@@ -66,7 +65,6 @@ function recalc() {
 }
 
 async function getWeather(coords) {
-  console.log(store.coords);
   let url = '';
   if (store.lang !== 'be') {
     url = `https://api.openweathermap.org/data/2.5/onecall?lat=${coords.latitude}&lon=${coords.longitude}&units=imperial&exclude=minutely,hourly&appid=${openWeatherToken}&lang=${store.lang}`;
@@ -75,9 +73,14 @@ async function getWeather(coords) {
   }
   const res = await fetch(url);
   const data = await res.json();
+  return data;
+}
+
+const renderWeather = async (coords) => {
+  const data = await getWeather(coords);
   console.log(data);
   showCurrentWeather(data.current);
   showForecast(data.daily);
 }
 
-export { getWeather, recalc };
+export { getWeather, recalc, renderWeather };

@@ -117,4 +117,4 @@ async function translatePage(toLang) {
 
 
 
-export { translatePage, translateVoiceNotificationBtn };
+export { translatePage, translateVoiceNotificationBtn, getTranslation };

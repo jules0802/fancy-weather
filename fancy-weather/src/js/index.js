@@ -8,12 +8,14 @@ import {
   saveLanguageToStorage, saveScaleToStorage, store,
 } from './storage';
 import CurrentDate from './CurrentDate';
-import { getCurrentPositionCoordinates, showGeoData, updateGeoData } from './getCurrentGeoData';
+import { getCurrentPositionCoordinates, updateGeoData } from './getCurrentGeoData';
 import { updateBackground } from './background';
-import { recalc, getWeather } from './getWeather';
+import { recalc, renderWeather } from './getWeather';
 import { translatePage, translateVoiceNotificationBtn } from './translation';
 import { getRequestedGeoData } from './citySearch';
-import { generateMessageToSay, setVoice } from './speechSynthesis';
+import {
+  generateMessageToSay, setVoice, generateMessageForWeather, generateMessageForForecast,
+} from './speechSynthesis';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const elems = document.querySelectorAll('select');
@@ -26,6 +28,8 @@ getCurrentPositionCoordinates();
 const layout = new Layout(store);
 layout.addToolBar();
 layout.addMain();
+
+let volume = 0.5;
 
 // Speech Recognition
 window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -40,7 +44,47 @@ recognition.addEventListener('result', (e) => {
     .map((result) => result.transcript);
 
   if (e.results[0].isFinal && transcript) {
-    document.querySelector('.search__input').value = transcript;
+    switch (transcript) {
+      case 'Weather':
+      case 'Погода':
+      case 'Надвор\'е': {
+        const msg = new SpeechSynthesisUtterance();
+        msg.text = generateMessageForWeather();
+        msg.voice = setVoice();
+        msg.volume = volume;
+        speechSynthesis.speak(msg);
+        break;
+      }
+      case 'Forecast':
+      case 'Прогноз':
+      case 'Прагноз': {
+        const msg = new SpeechSynthesisUtterance();
+        msg.text = generateMessageForForecast();
+        msg.voice = setVoice();
+        msg.volume = volume;
+        speechSynthesis.speak(msg);
+        break;
+      }
+      case 'Louder':
+      case 'Громче':
+      case 'Гучней': {
+        if (volume < 1) {
+          volume += 0.1;
+        }
+        break;
+      }
+      case 'Quiter':
+      case 'Тише':
+      case 'Цішэй': {
+        if (volume > 0) {
+          volume -= 0.1;
+        }
+        break;
+      }
+      default: {
+        document.querySelector('.search__input').value = transcript;
+      }
+    }
   }
 });
 
@@ -116,12 +160,15 @@ let intervalLocalTimeRefresh;
 
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
-  document.querySelector('.loader').classList.add('hidden');
+  document.querySelector('.loader').classList.remove('hidden');
   document.querySelectorAll('.search button').forEach((btn) => btn.blur());
   clearInterval(generalIntervalTimeRefresh);
   clearInterval(intervalLocalTimeRefresh);
   const data = await getRequestedGeoData(input.value);
-  store.coords = { latitude: data.results[0].geometry.lat, longitude: data.results[0].geometry.lng };
+  store.coords = {
+    latitude: data.results[0].geometry.lat,
+    longitude: data.results[0].geometry.lng,
+  };
   await updateGeoData([store.coords.latitude, store.coords.longitude]);
 
   const currentLocalDate = new CurrentDate();
@@ -135,8 +182,10 @@ form.addEventListener('submit', async (event) => {
     new CurrentDate().updateTimeOnPage(data.results[0].annotations.timezone.name);
   }, 1000);
 
-  await getWeather(store.coords);
-  document.querySelector('.loader').classList.remove('hidden');
+  console.log(store.coords);
+
+  await renderWeather(store.coords);
+  document.querySelector('.loader').classList.add('hidden');
 });
 
 const voiceNotification = document.querySelector('.toolbar__voice-notification');
@@ -153,6 +202,7 @@ voiceNotification.addEventListener('click', () => {
     const msg = new SpeechSynthesisUtterance();
     msg.text = generateMessageToSay();
     msg.voice = setVoice();
+    msg.volume = volume;
     console.log(store);
     console.log(msg.voice);
     speechSynthesis.speak(msg);

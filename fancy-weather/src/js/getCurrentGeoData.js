@@ -1,7 +1,7 @@
 import mapboxgl from 'mapbox-gl';
 import { ipInfoToken, openCageToken, mapBoxToken } from './constants';
 import { store } from './storage';
-import { getWeather } from './getWeather';
+import { renderWeather } from './getWeather';
 import { translatePage } from './translation';
 
 async function getCurrentIPGeoData() {
@@ -90,7 +90,7 @@ function getCurrentPositionCoordinates() {
     console.log(crd);
     store.coords = crd;
     await showGeoData([crd.latitude, crd.longitude]);
-    await getWeather(store.coords);
+    await renderWeather(store.coords);
     translatePage(store.lang);
   }
 
