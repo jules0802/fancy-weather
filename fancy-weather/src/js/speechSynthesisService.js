@@ -1,6 +1,5 @@
-import { store } from './storage';
+import { store } from './storageService';
 import { DAYS_OF_WEEK_RU } from './constants';
-import { getTranslation } from './translation';
 
 function generateMessageToSay() {
   switch (store.lang) {
@@ -52,39 +51,37 @@ const generateMessageForForecast = () => {
   let result = '';
   switch (store.lang) {
     case 'en': {
-      result += 'Tomorrow, ';
+      result = 'Tomorrow, ';
       document.querySelector('.forecast-container').children.forEach((element) => {
         result += `On ${element.querySelector('.forecast-header').innerText} the temperature will be 
     ${element.querySelector('.fcst-temp-value').innerText} degrees ${store.scale === 'c' ? 'centigrade' : 'fahrenheit'}, 
     ${element.querySelector('.fcst-temp-value').dataset.desc}. `;
       });
-      console.log(result)
       break;
     }
     default: {
-      result += 'Завтра, ';
-      document.querySelector('.forecast-container').children.forEach(async (element) => {
+      result = 'Завтра, ';
+      document.querySelector('.forecast-container').children.forEach((element) => {
         result += `${element.querySelector('.forecast-header').innerText} температура воздуха будет составлять 
     ${element.querySelector('.fcst-temp-value').innerText} градусов ${store.scale === 'c' ? 'по Цельсию' : 'по Фаренгейту'}, 
-    ${await getTranslation(element.querySelector('.fcst-temp-value').dataset.desc, 'ru')}. `;
+    ${element.querySelector('.fcst-temp-value').dataset.descru}. `;
       });
-      console.log(result)
       break;
     }
   }
   return result;
 };
 
-function setVoice() {
+const setVoice = () => {
   switch (store.lang) {
     case 'en': {
-      return speechSynthesis.getVoices()[0];
+      return speechSynthesis.getVoices().find((voice) => voice.lang === 'en-US');
     }
     default: {
-      return speechSynthesis.getVoices()[16];
+      return speechSynthesis.getVoices().find((voice) => voice.lang === 'ru-RU');
     }
   }
-}
+};
 
 export {
   generateMessageToSay, setVoice, generateMessageForWeather, generateMessageForForecast,

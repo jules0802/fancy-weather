@@ -1,8 +1,8 @@
 import { openCageToken } from './constants';
-import { store } from './storage';
-import { openModal } from './helpers';
+import { store } from './storageService';
+import openModal from './helpers';
 
-export async function getRequestedGeoData(city) {
+const getRequestedGeoData = async (city) => {
   const url = `https://api.opencagedata.com/geocode/v1/json?q=${city}&key=${openCageToken}&language=${store.lang}&pretty=1`;
   const res = await fetch(url);
   if (res.ok) {
@@ -10,4 +10,7 @@ export async function getRequestedGeoData(city) {
     return data;
   }
   openModal(res, 'Open Cage Data');
-}
+  return res;
+};
+
+export default getRequestedGeoData;

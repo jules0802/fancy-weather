@@ -1,7 +1,7 @@
 import {
   DAYS_OF_WEEK, DAYS_OF_WEEK_RU, DAYS_OF_WEEK_BE, MONTHS,
 } from './constants';
-import { store } from './storage';
+import { store } from './storageService';
 
 export default class CurrentDate {
   constructor() {
@@ -70,23 +70,20 @@ export default class CurrentDate {
 
   showForecastHeader() {
     const today = this.date.getDay() - 1;
+    const temp = [document.querySelector('.forecast-container__first .forecast-header'),
+      document.querySelector('.forecast-container__second .forecast-header'),
+      document.querySelector('.forecast-container__third .forecast-header')];
     switch (store.lang) {
       case 'en': {
-        document.querySelector('.forecast-container__first .forecast-header').innerText = DAYS_OF_WEEK[(today + 1) % 7];
-        document.querySelector('.forecast-container__second .forecast-header').innerText = DAYS_OF_WEEK[(today + 2) % 7];
-        document.querySelector('.forecast-container__third .forecast-header').innerText = DAYS_OF_WEEK[(today + 3) % 7];
+        temp.forEach((e, i) => { e.innerText = DAYS_OF_WEEK[(today + i + 1) % 7]; });
         break;
       }
       case 'ru': {
-        document.querySelector('.forecast-container__first .forecast-header').innerText = DAYS_OF_WEEK_RU[(today + 1) % 7];
-        document.querySelector('.forecast-container__second .forecast-header').innerText = DAYS_OF_WEEK_RU[(today + 2) % 7];
-        document.querySelector('.forecast-container__third .forecast-header').innerText = DAYS_OF_WEEK_RU[(today + 3) % 7];
+        temp.forEach((e, i) => { e.innerText = DAYS_OF_WEEK_RU[(today + i + 1) % 7]; });
         break;
       }
       default: {
-        document.querySelector('.forecast-container__first .forecast-header').innerText = DAYS_OF_WEEK_BE[(today + 1) % 7];
-        document.querySelector('.forecast-container__second .forecast-header').innerText = DAYS_OF_WEEK_BE[(today + 2) % 7];
-        document.querySelector('.forecast-container__third .forecast-header').innerText = DAYS_OF_WEEK_BE[(today + 3) % 7];
+        temp.forEach((e, i) => { e.innerText = DAYS_OF_WEEK_BE[(today + i + 1) % 7]; });
         break;
       }
     }

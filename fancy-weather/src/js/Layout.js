@@ -91,7 +91,7 @@ export default class Layout {
     voiceNotificationBtn.className = 'toolbar__voice-notification tool-btn';
     voiceNotificationBtn.innerText = 'Activate Voice Weather';
     toolBarContainer.appendChild(voiceNotificationBtn);
-  
+
 
     // FORM
     const form = document.createElement('form');
@@ -158,7 +158,7 @@ export default class Layout {
 
     const detailsIconContainer = document.createElement('div');
     detailsIconContainer.className = 'details__icon';
-    detailsIconContainer.insertAdjacentHTML('afterbegin', '<object type="image/svg+xml" data="" width="180" height="180" class="current-weather-icon"></object>')
+    detailsIconContainer.insertAdjacentHTML('afterbegin', '<object type="image/svg+xml" data="" width="180" height="180" class="current-weather-icon"></object>');
     currentWeatherDetails.appendChild(detailsIconContainer);
 
     const textDetails = document.createElement('div');
@@ -213,7 +213,7 @@ export default class Layout {
 
       const fcstTemperature = document.createElement('div');
       fcstTemperature.className = 'forecast-temperature';
-      fcstTemperature.insertAdjacentHTML('afterbegin', '<span class="fcst-temp-value"></span>°')
+      fcstTemperature.insertAdjacentHTML('afterbegin', '<span class="fcst-temp-value"></span>°');
       fcstBody.appendChild(fcstTemperature);
 
       const fcstIcon = document.createElement('div');

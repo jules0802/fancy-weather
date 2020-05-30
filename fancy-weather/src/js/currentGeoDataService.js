@@ -1,11 +1,11 @@
 import mapboxgl from 'mapbox-gl';
 import { ipInfoToken, openCageToken, mapBoxToken } from './constants';
-import { store } from './storage';
-import { renderWeather } from './getWeather';
-import { translatePage } from './translation';
-import { openModal } from './helpers';
+import { store } from './storageService';
+import { renderWeather } from './weatherService';
+import { translatePage } from './translationService';
+import openModal from './helpers';
 
-async function getCurrentIPGeoData() {
+const getCurrentIPGeoData = async () => {
   const url = `https://ipinfo.io/json?token=${ipInfoToken}`;
   const res = await fetch(url);
   if (res.ok) {
@@ -14,9 +14,10 @@ async function getCurrentIPGeoData() {
     return data.loc;
   }
   openModal(res, 'IP Info');
-}
+  return res;
+};
 
-async function getLocalityName(coords) {
+const getLocalityName = async (coords) => {
   const url = `https://api.opencagedata.com/geocode/v1/json?q=${coords}&key=${openCageToken}&language=${store.lang}&pretty=1`;
   const res = await fetch(url);
   if (res.ok) {
@@ -24,10 +25,11 @@ async function getLocalityName(coords) {
     return data.results[0].components;
   }
   openModal(res, 'Open Cage Data');
-}
- 
+  return res;
+};
 
-function addMap(coords) {
+
+const addMap = (coords) => {
   // eslint-disable-next-line no-param-reassign
   coords = coords.reverse();
   mapboxgl.accessToken = mapBoxToken;
@@ -44,9 +46,9 @@ function addMap(coords) {
   store.marker = new mapboxgl.Marker()
     .setLngLat(coords)
     .addTo(store.map);
-}
+};
 
-function updateMap(coords) {
+const updateMap = (coords) => {
   // eslint-disable-next-line no-param-reassign
   coords = coords.reverse();
   store.map.flyTo({
@@ -56,59 +58,55 @@ function updateMap(coords) {
     curve: 1,
     easing(t) {
       return t;
-    }
+    },
   });
   store.marker.setLngLat(coords).addTo(store.map);
-}
+};
 
-function showLatAndLng(coords) {
+const showLatAndLng = (coords) => {
   [document.querySelector('.coordinates__latitude .latitude-value').innerText,
     document.querySelector('.coordinates__longitude .longitude-value').innerText] = coords.map((el) => ` ${String(el).split('.')[0]}°${((String((+el).toFixed(2)).split('.')[1] * 60) / 100).toFixed(0)}'`);
-}
+};
 
-async function showGeoData(coords) {
-  console.log(coords);
+const showGeoData = async (coords) => {
   showLatAndLng(coords);
-
   const placeName = await getLocalityName(coords.join());
-  console.log('placeName', placeName);
   document.querySelector('.header__location span').innerText = `${placeName.city || placeName.county}, ${placeName.country}`;
   addMap(coords);
-}
+};
 
-async function updateGeoData(coords) {
-  console.log(coords);
+const updateGeoData = async (coords) => {
   showLatAndLng(coords);
-
   const placeName = await getLocalityName(coords.join());
-  console.log('placeName', placeName);
   document.querySelector('.header__location span').innerText = `${placeName.city || placeName.county}, ${placeName.country}`;
   updateMap(coords);
-}
+};
 
-function getCurrentPositionCoordinates() {
+const getCurrentPositionCoordinates = () => {
   const options = {
     enableHighAccuracy: true,
     timeout: 5000,
     maximumAge: 0,
   };
 
-  async function success(pos) {
+  const success = async (pos) => {
     const crd = pos.coords;
-    console.log(crd);
     store.coords = crd;
     await showGeoData([crd.latitude, crd.longitude]);
     await renderWeather(store.coords);
     translatePage(store.lang);
-  }
+  };
 
-  async function error(err) {
+  const error = async (err) => {
+    // eslint-disable-next-line no-console
     console.warn(`ERROR(${err.code}): ${err.message}`);
     const location = await getCurrentIPGeoData();
     showGeoData(location.split(','));
-  }
+  };
 
   navigator.geolocation.getCurrentPosition(success, error, options);
-}
+};
 
-export { getCurrentPositionCoordinates, showGeoData, updateGeoData };
+export {
+  getCurrentPositionCoordinates, showGeoData, updateGeoData, getLocalityName,
+};

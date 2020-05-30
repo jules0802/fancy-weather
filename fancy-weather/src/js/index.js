@@ -6,16 +6,16 @@ import './preload_img';
 import Layout from './Layout';
 import {
   saveLanguageToStorage, saveScaleToStorage, store,
-} from './storage';
+} from './storageService';
 import CurrentDate from './CurrentDate';
-import { getCurrentPositionCoordinates, updateGeoData } from './getCurrentGeoData';
-import { updateBackground } from './background';
-import { recalc, renderWeather } from './getWeather';
-import { translatePage, translateVoiceNotificationBtn } from './translation';
-import { getRequestedGeoData } from './citySearch';
+import { getCurrentPositionCoordinates, updateGeoData } from './currentGeoDataService';
+import updateBackground from './backgroundService';
+import { recalc, renderWeather } from './weatherService';
+import { translatePage, translateVoiceNotificationBtn } from './translationService';
+import getRequestedGeoData from './citySearchService';
 import {
   generateMessageToSay, setVoice, generateMessageForWeather, generateMessageForForecast,
-} from './speechSynthesis';
+} from './speechSynthesisService';
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -52,7 +52,6 @@ recognition.addEventListener('result', (e) => {
     .map((result) => result[0])
     .map((result) => result.transcript);
   if (e.results[0].isFinal && transcript) {
-    console.log(transcript.toString());
     switch (transcript.toString()) {
       case 'weather':
       case 'погода':
@@ -71,17 +70,13 @@ recognition.addEventListener('result', (e) => {
       case 'louder':
       case 'громче':
       case 'гучней': {
-        if (volume < 1) {
-          volume += 0.1;
-        }
+        volume = volume === 0.3 ? 0.5 : 1;
         break;
       }
       case 'quiter':
       case 'тише':
       case 'цішэй': {
-        if (volume > 0) {
-          volume -= 0.1;
-        }
+        volume = volume === 0.5 ? 0.3 : 0.5;
         break;
       }
       default: {
@@ -108,7 +103,6 @@ recognition.addEventListener('end', () => {
   if (document.querySelector('.search__input').value) {
     document.querySelector('.search__general-button').click();
   } else {
-    console.log(msg);
     msg.volume = volume;
     if (msg.text) {
       setTimeout(() => {
@@ -135,7 +129,7 @@ const generalIntervalTimeRefresh = window.setInterval(() => {
 
 // Event Listeners
 
-document.querySelector('.toolbar__refresh-background-btn').addEventListener('click', () => {  
+document.querySelector('.toolbar__refresh-background-btn').addEventListener('click', () => {
   updateBackground(store.season, store.dayPart);
 });
 
@@ -177,28 +171,35 @@ form.addEventListener('submit', async (event) => {
   clearInterval(generalIntervalTimeRefresh);
   clearInterval(intervalLocalTimeRefresh);
   const data = await getRequestedGeoData(input.value);
-  store.coords = {
-    latitude: data.results[0].geometry.lat,
-    longitude: data.results[0].geometry.lng,
-  };
-  await updateGeoData([store.coords.latitude, store.coords.longitude]);
+  console.log(data)
+  if (data.results.length > 0) {
+    store.coords = {
+      latitude: data.results[0].geometry.lat,
+      longitude: data.results[0].geometry.lng,
+    };
+    await updateGeoData([store.coords.latitude, store.coords.longitude]);
 
-  const currentLocalDate = new CurrentDate();
-  currentLocalDate.updateTimeOnPage(data.results[0].annotations.timezone.name);
-  currentLocalDate.showForecastHeader();
-  store.season = currentLocalDate.getCurrentSeason();
-  store.dayPart = currentLocalDate.getCurrentPartOfDay(data.results[0].annotations.timezone.name);
-  await updateBackground(store.season, store.dayPart);
+    const currentLocalDate = new CurrentDate();
+    currentLocalDate.updateTimeOnPage(data.results[0].annotations.timezone.name);
+    currentLocalDate.showForecastHeader();
+    store.season = currentLocalDate.getCurrentSeason();
+    store.dayPart = currentLocalDate.getCurrentPartOfDay(data.results[0].annotations.timezone.name);
+    await updateBackground(store.season, store.dayPart);
 
-  intervalLocalTimeRefresh = window.setInterval(() => {
-    new CurrentDate().updateTimeOnPage(data.results[0].annotations.timezone.name);
-  }, 1000);
+    intervalLocalTimeRefresh = window.setInterval(() => {
+      new CurrentDate().updateTimeOnPage(data.results[0].annotations.timezone.name);
+    }, 1000);
 
-  console.log(store.coords);
-
-  await renderWeather(store.coords);
+    await renderWeather(store.coords);
+    document.querySelector('.loader').classList.add('hidden');
+  } else {
+    document.querySelector('.loader').classList.add('hidden');
+    // eslint-disable-next-line no-undef
+    const modal = M.Modal.getInstance(document.querySelector('.modal'));
+    document.querySelector('.error-text').innerText = `No results for ${input.value}. Change your request.`;
+    modal.open();
+  }
   input.value = '';
-  document.querySelector('.loader').classList.add('hidden');
 });
 
 const voiceNotification = document.querySelector('.toolbar__voice-notification');
@@ -214,8 +215,6 @@ voiceNotification.addEventListener('click', () => {
     translateVoiceNotificationBtn();
     msg.text = generateMessageToSay();
     msg.voice = setVoice();
-    console.log(store);
-    console.log(msg.voice);
     speechSynthesis.speak(msg);
   } else {
     speechSynthesis.cancel();
@@ -223,4 +222,3 @@ voiceNotification.addEventListener('click', () => {
     translateVoiceNotificationBtn();
   }
 });
-

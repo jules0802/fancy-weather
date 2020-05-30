@@ -1,8 +1,8 @@
-function preloadImages(...args) {
-  for (let i = 0; i < arguments.length; i += 1) {
+const preloadImages = (...args) => {
+  for (let i = 0; i < [...args].length; i += 1) {
     new Image().src = [...args][i];
   }
-}
+};
 
 preloadImages(
   './assets/icons/broken_clouds.svg',

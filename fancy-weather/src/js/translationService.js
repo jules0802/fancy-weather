@@ -1,11 +1,12 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable prefer-destructuring */
 import {
   DAYS_OF_WEEK, DAYS_OF_WEEK_RU, DAYS_OF_WEEK_BE, yandexTranslateToken,
 } from './constants';
-import { store } from './storage';
-import { getWeather } from './getWeather';
+import { store } from './storageService';
 import { openModal } from './helpers';
 
-async function getTranslation(text, toLang) {
+const getTranslation = async (text, toLang) => {
   const url = `https://translate.yandex.net/api/v1.5/tr.json/translate?key=${yandexTranslateToken}&text=${text}&lang=${toLang}`;
   const res = await fetch(url);
   if (res.ok) {
@@ -13,9 +14,10 @@ async function getTranslation(text, toLang) {
     return data.text;
   }
   openModal(res, 'Yandex Translate');
-}
+  return res;
+};
 
-function translateDayOfWeek(str, toLang) {
+const translateDayOfWeek = (str, toLang) => {
   let index;
 
   if (DAYS_OF_WEEK.includes(str)) {
@@ -44,17 +46,17 @@ function translateDayOfWeek(str, toLang) {
   }
 
   return result;
-}
+};
 
-function translateVoiceNotificationBtn() {
+const translateVoiceNotificationBtn = () => {
   const posStates = {
     activate: ['Activate Voice Weather', 'Активировать Голосовую Погоду', 'Актываваць Галасавую Надвор\'е'],
     listen: ['Listen to weather', 'Прослушать погоду', 'Праслухаць надвор\'е'],
-    stop: ['Stop', 'Остановить', 'Спыніць']
+    stop: ['Stop', 'Остановить', 'Спыніць'],
   };
   const voiceNotification = document.querySelector('.toolbar__voice-notification');
+  // eslint-disable-next-line max-len
   const currentState = Object.keys(posStates).find((key) => posStates[key].includes(voiceNotification.innerText));
-  console.log(currentState);
   switch (store.lang) {
     case 'en': {
       voiceNotification.innerText = posStates[currentState][0];
@@ -69,9 +71,9 @@ function translateVoiceNotificationBtn() {
       break;
     }
   }
-}
+};
 
-async function translatePage(toLang) {
+const translatePage = async (toLang) => {
   const textNodesToBeTranslated = [
     document.querySelector('.details__description'),
     document.querySelector('.search__general-button'),
@@ -115,10 +117,9 @@ async function translatePage(toLang) {
     // eslint-disable-next-line no-param-reassign
     el.innerText = translateDayOfWeek(el.innerText, toLang);
 
-      translateVoiceNotificationBtn();
+    translateVoiceNotificationBtn();
   });
-}
+};
 
 
-
-export { translatePage, translateVoiceNotificationBtn, getTranslation };
+export { translatePage, translateVoiceNotificationBtn, getTranslation, translateDayOfWeek };

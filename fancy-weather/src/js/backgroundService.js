@@ -1,24 +1,23 @@
 import { unsplashToken } from './constants';
-import { openModal } from './helpers';
+import openModal from './helpers';
 
-async function getBackgroundImage(season, dayPart) {
+// eslint-disable-next-line consistent-return
+const getBackgroundImage = async (season, dayPart) => {
   try {
     const url = `https://api.unsplash.com/photos/random?query=${season},${dayPart},city,nature&client_id=${unsplashToken}`;
     console.log('background img request', url);
     const res = await fetch(url);
-    console.log(res);
     if (res.ok) {
       const data = await res.json();
-      console.log(data);
       return data.urls.regular;
     }
     openModal(res, 'Background');
   } catch (e) {
     console.log(e);
   }
-}
+};
 
-async function updateBackground(season, dayPart) {
+const updateBackground = async (season, dayPart) => {
   const bgImg = new Image();
   bgImg.onload = function handler() {
     document.querySelectorAll('.background-container').forEach((el) => {
@@ -30,6 +29,6 @@ async function updateBackground(season, dayPart) {
     });
   };
   bgImg.src = await getBackgroundImage(season, dayPart);
-}
+};
 
-export { updateBackground };
+export default updateBackground;
