@@ -58,19 +58,20 @@ const generateMessageForForecast = () => {
     ${element.querySelector('.fcst-temp-value').innerText} degrees ${store.scale === 'c' ? 'centigrade' : 'fahrenheit'}, 
     ${element.querySelector('.fcst-temp-value').dataset.desc}. `;
       });
+      console.log(result)
       break;
     }
     default: {
-      result = 'Завтра, ';
+      result += 'Завтра, ';
       document.querySelector('.forecast-container').children.forEach(async (element) => {
-        result += `${element.querySelector('.forecast-header').innerText} температура водуха будет составлять 
+        result += `${element.querySelector('.forecast-header').innerText} температура воздуха будет составлять 
     ${element.querySelector('.fcst-temp-value').innerText} градусов ${store.scale === 'c' ? 'по Цельсию' : 'по Фаренгейту'}, 
     ${await getTranslation(element.querySelector('.fcst-temp-value').dataset.desc, 'ru')}. `;
       });
+      console.log(result)
       break;
     }
   }
-
   return result;
 };
 

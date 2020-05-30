@@ -3,21 +3,29 @@ import { ipInfoToken, openCageToken, mapBoxToken } from './constants';
 import { store } from './storage';
 import { renderWeather } from './getWeather';
 import { translatePage } from './translation';
+import { openModal } from './helpers';
 
 async function getCurrentIPGeoData() {
   const url = `https://ipinfo.io/json?token=${ipInfoToken}`;
   const res = await fetch(url);
-  const data = await res.json();
-  store.coords = data.loc;
-  return data.loc;
+  if (res.ok) {
+    const data = await res.json();
+    store.coords = data.loc;
+    return data.loc;
+  }
+  openModal(res, 'IP Info');
 }
 
 async function getLocalityName(coords) {
   const url = `https://api.opencagedata.com/geocode/v1/json?q=${coords}&key=${openCageToken}&language=${store.lang}&pretty=1`;
   const res = await fetch(url);
-  const data = await res.json();
-  return data.results[0].components;
+  if (res.ok) {
+    const data = await res.json();
+    return data.results[0].components;
+  }
+  openModal(res, 'Open Cage Data');
 }
+ 
 
 function addMap(coords) {
   // eslint-disable-next-line no-param-reassign

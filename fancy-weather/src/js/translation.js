@@ -3,12 +3,16 @@ import {
 } from './constants';
 import { store } from './storage';
 import { getWeather } from './getWeather';
+import { openModal } from './helpers';
 
 async function getTranslation(text, toLang) {
   const url = `https://translate.yandex.net/api/v1.5/tr.json/translate?key=${yandexTranslateToken}&text=${text}&lang=${toLang}`;
   const res = await fetch(url);
-  const data = await res.json();
-  return data.text;
+  if (res.ok) {
+    const data = await res.json();
+    return data.text;
+  }
+  openModal(res, 'Yandex Translate');
 }
 
 function translateDayOfWeek(str, toLang) {

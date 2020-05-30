@@ -1,5 +1,6 @@
 import { openWeatherToken, weatherIcons } from './constants';
 import { store } from './storage';
+import { openModal } from './helpers';
 // import { translatePage } from './translation';
 
 function getIconPath(weatherIconId) {
@@ -72,8 +73,12 @@ async function getWeather(coords) {
     url = `https://api.openweathermap.org/data/2.5/onecall?lat=${coords.latitude}&lon=${coords.longitude}&units=imperial&exclude=minutely,hourly&appid=${openWeatherToken}&lang=ru`;
   }
   const res = await fetch(url);
-  const data = await res.json();
-  return data;
+  console.log(res);
+  if (res.ok) {
+    const data = await res.json();
+    return data;
+  }
+  openModal(res, 'Weather');
 }
 
 const renderWeather = async (coords) => {

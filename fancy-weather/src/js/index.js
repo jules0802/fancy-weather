@@ -17,10 +17,15 @@ import {
   generateMessageToSay, setVoice, generateMessageForWeather, generateMessageForForecast,
 } from './speechSynthesis';
 
-document.addEventListener('DOMContentLoaded', async () => {
+
+document.addEventListener('DOMContentLoaded', () => {
   const elems = document.querySelectorAll('select');
   // eslint-disable-next-line
   const instances = M.FormSelect.init(elems);
+
+  const modals = document.querySelectorAll('.modal');
+  // eslint-disable-next-line
+  const modalInstance = M.Modal.init(modals);
 });
 getCurrentPositionCoordinates();
 
@@ -38,44 +43,42 @@ const speechBtn = document.querySelector('.search__speech-button');
 const recognition = new SpeechRecognition();
 recognition.interimResults = true;
 recognition.lang = store.lang;
+
+const msg = new SpeechSynthesisUtterance();
+msg.volume = volume;
+
 recognition.addEventListener('result', (e) => {
   const transcript = Array.from(e.results)
     .map((result) => result[0])
     .map((result) => result.transcript);
-
   if (e.results[0].isFinal && transcript) {
-    switch (transcript) {
-      case 'Weather':
-      case 'Погода':
-      case 'Надвор\'е': {
-        const msg = new SpeechSynthesisUtterance();
+    console.log(transcript.toString());
+    switch (transcript.toString()) {
+      case 'weather':
+      case 'погода':
+      case 'надвор\'е': {
         msg.text = generateMessageForWeather();
         msg.voice = setVoice();
-        msg.volume = volume;
-        speechSynthesis.speak(msg);
         break;
       }
-      case 'Forecast':
-      case 'Прогноз':
-      case 'Прагноз': {
-        const msg = new SpeechSynthesisUtterance();
+      case 'forecast':
+      case 'прогноз':
+      case 'прагноз': {
         msg.text = generateMessageForForecast();
         msg.voice = setVoice();
-        msg.volume = volume;
-        speechSynthesis.speak(msg);
         break;
       }
-      case 'Louder':
-      case 'Громче':
-      case 'Гучней': {
+      case 'louder':
+      case 'громче':
+      case 'гучней': {
         if (volume < 1) {
           volume += 0.1;
         }
         break;
       }
-      case 'Quiter':
-      case 'Тише':
-      case 'Цішэй': {
+      case 'quiter':
+      case 'тише':
+      case 'цішэй': {
         if (volume > 0) {
           volume -= 0.1;
         }
@@ -83,6 +86,7 @@ recognition.addEventListener('result', (e) => {
       }
       default: {
         document.querySelector('.search__input').value = transcript;
+        break;
       }
     }
   }
@@ -103,6 +107,14 @@ speechBtn.addEventListener('click', (event) => {
 recognition.addEventListener('end', () => {
   if (document.querySelector('.search__input').value) {
     document.querySelector('.search__general-button').click();
+  } else {
+    console.log(msg);
+    msg.volume = volume;
+    if (msg.text) {
+      setTimeout(() => {
+        speechSynthesis.speak(msg);
+      }, 1000);
+    }
   }
   speechBtn.classList.remove('active');
   speechBtn.blur();
@@ -123,7 +135,7 @@ const generalIntervalTimeRefresh = window.setInterval(() => {
 
 // Event Listeners
 
-document.querySelector('.toolbar__refresh-background-btn').addEventListener('click', () => {
+document.querySelector('.toolbar__refresh-background-btn').addEventListener('click', () => {  
   updateBackground(store.season, store.dayPart);
 });
 
@@ -185,6 +197,7 @@ form.addEventListener('submit', async (event) => {
   console.log(store.coords);
 
   await renderWeather(store.coords);
+  input.value = '';
   document.querySelector('.loader').classList.add('hidden');
 });
 
@@ -199,10 +212,8 @@ voiceNotification.addEventListener('click', () => {
   } else if (!speechSynthesis.speaking) {
     voiceNotification.innerText = 'Stop';
     translateVoiceNotificationBtn();
-    const msg = new SpeechSynthesisUtterance();
     msg.text = generateMessageToSay();
     msg.voice = setVoice();
-    msg.volume = volume;
     console.log(store);
     console.log(msg.voice);
     speechSynthesis.speak(msg);
@@ -212,3 +223,4 @@ voiceNotification.addEventListener('click', () => {
     translateVoiceNotificationBtn();
   }
 });
+
