@@ -4,7 +4,7 @@ import {
   DAYS_OF_WEEK, DAYS_OF_WEEK_RU, DAYS_OF_WEEK_BE, yandexTranslateToken,
 } from './constants';
 import { store } from './storageService';
-import { openModal } from './helpers';
+import { openModal, getApiRes } from './helpers';
 
 const getTranslation = async (text, toLang) => {
   const url = `https://translate.yandex.net/api/v1.5/tr.json/translate?key=${yandexTranslateToken}&text=${text}&lang=${toLang}`;

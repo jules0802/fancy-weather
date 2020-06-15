@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 export default class Layout {
   constructor(store) {
     this.lang = store.lang;
@@ -8,15 +9,9 @@ export default class Layout {
     this.body.appendChild(this.wrapper);
   }
 
-  addToolBar() {
-    // LEFT TOOLBAR
-    const toolBarContainer = document.createElement('div');
-    toolBarContainer.className = 'toolbar-container';
-
-    // fill ToolBar
+  createLeftToolBar() {
     const leftToolBar = document.createElement('div');
-    leftToolBar.className = 'toolbar-container__left toolbar';
-    toolBarContainer.appendChild(leftToolBar);
+    leftToolBar.className = 'toolbar-container__left toolbar';    
 
     const refreshBtn = document.createElement('div');
     refreshBtn.className = 'toolbar__refresh-background-btn tool-btn';
@@ -85,15 +80,17 @@ export default class Layout {
     selectScaleBtns.appendChild(fahrenheitBtn);
     selectScaleBtns.appendChild(celsiusBtn);
     leftToolBar.appendChild(selectScaleBtns);
+    return leftToolBar;
+  }
 
-    // Voice weather
+  createVoiceNotificationBtn() {
     const voiceNotificationBtn = document.createElement('div');
     voiceNotificationBtn.className = 'toolbar__voice-notification tool-btn';
     voiceNotificationBtn.innerText = 'Activate Voice Weather';
-    toolBarContainer.appendChild(voiceNotificationBtn);
+    return voiceNotificationBtn;
+  }
 
-
-    // FORM
+  createForm() {
     const form = document.createElement('form');
     form.className = 'toolbar__search search';
 
@@ -116,19 +113,30 @@ export default class Layout {
     searchButton.setAttribute('type', 'submit');
     searchButton.innerText = 'Search';
     form.appendChild(searchButton);
+    return form;
+  }
 
-    toolBarContainer.appendChild(form);
-
+  addToolBar() {
+    const toolBarContainer = document.createElement('div');
+    toolBarContainer.className = 'toolbar-container';
+    toolBarContainer.appendChild(this.createLeftToolBar());
+    toolBarContainer.appendChild(this.createVoiceNotificationBtn());
+    toolBarContainer.appendChild(this.createForm());
     this.wrapper.appendChild(toolBarContainer);
   }
 
-  addMain() {
-    const main = document.createElement('main');
-    // WEATHER
+  createWeather() {
     const weatherContainer = document.createElement('div');
     weatherContainer.className = 'weather';
 
-    // header
+    weatherContainer.appendChild(this.createHeader());
+    weatherContainer.appendChild(this.createCurrentWeather());
+    weatherContainer.appendChild(this.createForecast());
+
+    return weatherContainer;
+  }
+
+  createHeader() {
     const header = document.createElement('div');
     header.className = 'weather__header header';
 
@@ -141,10 +149,10 @@ export default class Layout {
     headerDate.className = 'header__date';
     headerDate.insertAdjacentHTML('afterbegin', '<i class="material-icons">date_range</i><span> </span>');
     header.appendChild(headerDate);
+    return header;
+  }
 
-    weatherContainer.appendChild(header);
-
-    // currentWeather
+  createCurrentWeather() {
     const currentWeather = document.createElement('div');
     currentWeather.className = 'current-weather';
 
@@ -185,9 +193,10 @@ export default class Layout {
     textDetails.appendChild(detailsHumidity);
 
     currentWeather.appendChild(currentWeatherDetails);
-    weatherContainer.appendChild(currentWeather);
+    return currentWeather;
+  }
 
-    // forecast
+  createForecast() {
     const forecastContainer = document.createElement('div');
     forecastContainer.className = 'forecast-container';
 
@@ -223,12 +232,10 @@ export default class Layout {
 
       day.appendChild(fcstBody);
     });
+    return forecastContainer;
+  }
 
-    weatherContainer.appendChild(forecastContainer);
-
-    main.appendChild(weatherContainer);
-
-    // LOCATION
+  createLocation() {
     const locationContainer = document.createElement('div');
     locationContainer.className = 'location';
 
@@ -251,8 +258,13 @@ export default class Layout {
     locationCoordinates.appendChild(longitude);
 
     locationContainer.appendChild(locationCoordinates);
+    return locationContainer;
+  }
 
-    main.appendChild(locationContainer);
+  addMain() {
+    const main = document.createElement('main');
+    main.appendChild(this.createWeather());
+    main.appendChild(this.createLocation());
     this.wrapper.appendChild(main);
   }
 }

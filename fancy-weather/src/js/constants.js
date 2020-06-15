@@ -2,6 +2,10 @@ const DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'S
 const DAYS_OF_WEEK_RU = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'].map((el) => el.toUpperCase());
 const DAYS_OF_WEEK_BE = ['Панядзелак', 'Аўторак', 'Асяроддзе', 'Чацвер', 'Пятніца', 'Субота', 'Нядзеля'].map((el) => el.toUpperCase());
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const VOLUME_MID = 0.5;
+const VOLUME_UP = 1;
+const VOLUME_DOWN = 0.3;
+const ONESEC = 1000;
 const ipInfoToken = 'df8d7fa9b9577f';
 const openCageToken = '738f6b21910545658067b56a17e900ee';
 const mapBoxToken = 'pk.eyJ1IjoianVsZXMwODAyIiwiYSI6ImNrYTU5cmlrajExeHEzbnBuMXBqbGg0dGkifQ.VL3SvWYyZDYt1ZA27u3exA';
@@ -33,4 +37,5 @@ export {
   DAYS_OF_WEEK, DAYS_OF_WEEK_RU, DAYS_OF_WEEK_BE,
   MONTHS, ipInfoToken, openCageToken, mapBoxToken, openWeatherToken,
   weatherIcons, unsplashToken, yandexTranslateToken,
+  VOLUME_MID, VOLUME_UP, VOLUME_DOWN, ONESEC,
 };

@@ -579,8 +579,7 @@ main {
         height: 80%;
         //background: lightblue;
         border-radius: 5px;
-        clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 75% 75%, 51% 100%, 50% 75%, 0% 75%);
-
+        clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 75% 75%, 51% 100%, 50% 75%, 0% 75%);        
         @media screen and (max-width: 767px) {
             clip-path: none;
             width: 70%;

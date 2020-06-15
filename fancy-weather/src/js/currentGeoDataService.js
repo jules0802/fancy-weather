@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 import mapboxgl from 'mapbox-gl';
 import { ipInfoToken, openCageToken, mapBoxToken } from './constants';
 import { store } from './storageService';
@@ -64,8 +65,9 @@ const updateMap = (coords) => {
 };
 
 const showLatAndLng = (coords) => {
+  const textArr = coords.map((el) => ` ${String(el).split('.')[0]}°${((String((+el).toFixed(2)).split('.')[1] * 60) / 100).toFixed(0)}'`);
   [document.querySelector('.coordinates__latitude .latitude-value').innerText,
-    document.querySelector('.coordinates__longitude .longitude-value').innerText] = coords.map((el) => ` ${String(el).split('.')[0]}°${((String((+el).toFixed(2)).split('.')[1] * 60) / 100).toFixed(0)}'`);
+    document.querySelector('.coordinates__longitude .longitude-value').innerText] = textArr;
 };
 
 const showGeoData = async (coords) => {
@@ -100,6 +102,7 @@ const getCurrentPositionCoordinates = () => {
   const error = async (err) => {
     // eslint-disable-next-line no-console
     console.warn(`ERROR(${err.code}): ${err.message}`);
+    openModal(err, 'Navigator');
     const location = await getCurrentIPGeoData();
     showGeoData(location.split(','));
   };

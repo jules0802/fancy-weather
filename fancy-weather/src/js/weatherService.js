@@ -58,11 +58,11 @@ const recalc = () => {
 };
 
 const getWeather = async (coords) => {
-  let url = '';
+  let url = `https://api.openweathermap.org/data/2.5/onecall?lat=${coords.latitude}&lon=${coords.longitude}&units=imperial&exclude=minutely,hourly&appid=${openWeatherToken}&lang=`;
   if (store.lang !== 'be') {
-    url = `https://api.openweathermap.org/data/2.5/onecall?lat=${coords.latitude}&lon=${coords.longitude}&units=imperial&exclude=minutely,hourly&appid=${openWeatherToken}&lang=${store.lang}`;
+    url += store.lang;
   } else {
-    url = `https://api.openweathermap.org/data/2.5/onecall?lat=${coords.latitude}&lon=${coords.longitude}&units=imperial&exclude=minutely,hourly&appid=${openWeatherToken}&lang=ru`;
+    url += 'ru';
   }
   try {
     const res = await fetch(url);

@@ -5,4 +5,18 @@ const openModal = (res, apiName) => {
     ${res.status === 403 ? 'Request limit reached.' : ''}`;
   modal.open();
 };
-export default openModal;
+
+
+const getApiRes = async (url) => {
+  let res;
+  let data;
+  try {
+    res = await fetch(url);
+    data = await res.json();
+  } catch (err) {
+    res = err;
+  }
+  return data;
+};
+
+export { openModal, getApiRes };
