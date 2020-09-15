@@ -4,7 +4,7 @@ import {
   DAYS_OF_WEEK, DAYS_OF_WEEK_RU, DAYS_OF_WEEK_BE, yandexTranslateToken,
 } from './constants';
 import { store } from './storageService';
-import { openModal, getApiRes } from './helpers';
+import { openModal } from './helpers';
 
 const getTranslation = async (text, toLang) => {
   const url = `https://translate.yandex.net/api/v1.5/tr.json/translate?key=${yandexTranslateToken}&text=${text}&lang=${toLang}`;
@@ -85,10 +85,10 @@ const translatePage = async (toLang) => {
     document.querySelector('.coordinates__latitude > span:nth-child(1)'),
   ];
 
-  textNodesToBeTranslated.forEach(async (el) => {
-    // eslint-disable-next-line no-param-reassign
-    el.innerText = await getTranslation(el.innerText, toLang);
-  });
+  // textNodesToBeTranslated.forEach(async (el) => {
+  //   // eslint-disable-next-line no-param-reassign
+  //   el.innerText = await getTranslation(el.innerText, toLang);
+  // });
 
   switch (toLang) {
     case 'en': {

@@ -25,7 +25,7 @@ const showForecast = (data) => {
     const temperature = element.querySelector('.fcst-temp-value');
     temperature.innerText = store.scale === 'f' ? Math.round(data[index].temp.day) : calcFtoC(data[index].temp.day);
     temperature.setAttribute('data-desc', data[index].weather[0].main);
-    temperature.setAttribute('data-descru', await getTranslation(data[index].weather[0].main, 'ru'));
+    //temperature.setAttribute('data-descru', await getTranslation(data[index].weather[0].main, 'ru'));
     element.querySelector('.fcst-weather-icon').setAttribute('data', getIconPath(data[index].weather[0].icon));
   });
 };

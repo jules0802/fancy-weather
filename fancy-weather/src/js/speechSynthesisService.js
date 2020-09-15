@@ -64,7 +64,7 @@ const generateMessageForForecast = () => {
       document.querySelector('.forecast-container').children.forEach((element) => {
         result += `${element.querySelector('.forecast-header').innerText} температура воздуха будет составлять 
     ${element.querySelector('.fcst-temp-value').innerText} градусов ${store.scale === 'c' ? 'по Цельсию' : 'по Фаренгейту'}, 
-    ${element.querySelector('.fcst-temp-value').dataset.descru}. `;
+    ${element.querySelector('.fcst-temp-value').innerText}. `;
       });
       break;
     }

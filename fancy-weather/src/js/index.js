@@ -1,8 +1,8 @@
 import 'bootstrap';
 import '../css/style.css';
 import '../css/style.scss';
-import './materialize';
 import './preload_img';
+import 'materialize-css';
 import Layout from './Layout';
 import {
   saveScaleToStorage, store,
@@ -27,8 +27,7 @@ import enableSpeechRec from './speechRec';
 // });
 
 document.addEventListener('DOMContentLoaded', () => {
-  // eslint-disable-next-line no-undef
-  M.AutoInit();
+  // eslint-disable-next-line no-undef 
 
   getCurrentPositionCoordinates();
 
@@ -36,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const layout = new Layout(store);
   layout.addToolBar();
   layout.addMain();
-
+  M.AutoInit();
 
   enableSpeechRec();
 

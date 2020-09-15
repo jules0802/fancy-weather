@@ -1,7 +1,6 @@
 const path = require('path');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
 
@@ -121,11 +120,12 @@ const config = {
       template: './src/index.html',
       filename: './index.html'
     }),    
-    new CopyWebpackPlugin([
-      { from: './src/assets', to: './assets/' },
-      { from: './src/assets/images', to: './assets/images/' },
-      { from: './src/assets/icons', to: './assets/icons/' }
-    ]),
+    new CopyWebpackPlugin({
+      patterns:[
+        { from: './src/assets', to: './assets/' },
+        { from: './src/assets/images', to: './assets/images/' },
+        { from: './src/assets/icons', to: './assets/icons/' }
+    ]}),
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
@@ -142,11 +142,5 @@ const config = {
     clientLogLevel: 'none'
   }
 }
-
-if (isProd) {
-  config.plugins.push(
-    new UglifyJSPlugin(),
-  );
-};
 
 module.exports = config;
